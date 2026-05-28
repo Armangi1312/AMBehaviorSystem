@@ -8,9 +8,9 @@ namespace AMBehaviorSystem.Core.Utilities
 {
     public static class ProcessorDependencyValidator
     {
-        private static readonly Dictionary<Type, (Type[] Context, Type[] Setting, Type[] Processor)> cache = new();
+        private static readonly Dictionary<Type, (Type[] Context, Type[] Setting)> cache = new();
 
-        public static (Type[] Context, Type[] Setting, Type[] Processor) GetRequiredTypes(Type processorType)
+        public static (Type[] Context, Type[] Setting) GetRequiredTypes(Type processorType)
         {
             if (cache.TryGetValue(processorType, out var cached))
                 return cached;
@@ -19,7 +19,6 @@ namespace AMBehaviorSystem.Core.Utilities
 
             HashSet<Type> settingList = new();
             HashSet<Type> contextList = new();
-            HashSet<Type> processorList = new();
 
             foreach (RequiredAttribute attribute in attributes)
             {
@@ -27,11 +26,9 @@ namespace AMBehaviorSystem.Core.Utilities
                 {
                     bool isAssignableFromSetting = typeof(ISetting).IsAssignableFrom(type) && type != typeof(ISetting);
                     bool isAssignableFromContext = typeof(IContext).IsAssignableFrom(type) && type != typeof(IContext);
-                    bool isAssignableFromProcessor = typeof(Processor).IsAssignableFrom(type) && type != typeof(Processor);
 
                     bool isValid = isAssignableFromSetting
-                                 ^ isAssignableFromContext
-                                 ^ isAssignableFromProcessor;
+                                 ^ isAssignableFromContext;
 
                     if (!isValid)
                         throw new InvalidOperationException($"{type.Name}은(는) IContext, ISetting, 또는 Processor의 하위 유형이 아닙니다.");
@@ -40,12 +37,10 @@ namespace AMBehaviorSystem.Core.Utilities
                         contextList.Add(type);
                     else if (isAssignableFromSetting)
                         settingList.Add(type);
-                    else if (isAssignableFromProcessor)
-                        processorList.Add(type);
                 }
             }
 
-            var result = (contextList.ToArray(), settingList.ToArray(), processorList.ToArray());
+            var result = (contextList.ToArray(), settingList.ToArray());
             cache[processorType] = result;
             return result;
         }

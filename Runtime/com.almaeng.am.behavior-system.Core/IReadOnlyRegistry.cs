@@ -22,6 +22,13 @@ namespace AMBehaviorSystem.Core
         /// <param name="value">등록된 클래스 객체</param>
         /// <returns>반환할 수 있는지 여부</returns>
         bool TryGet(Type type, out object value);
+
+        /// <summary>
+        /// 등록된 클래스 객체를 반환합니다.
+        /// </summary>
+        /// <param name="type">객체의 자료형</param>
+        /// <returns>등록된 클래스 객체</returns>
+        bool Contains(Type type);
     }
 
     /// <summary>
@@ -44,5 +51,13 @@ namespace AMBehaviorSystem.Core
         /// <param name="value">등록된 클래스 객체</param>
         /// <returns>반환할 수 있는지 여부</returns>
         bool TryGet<T>(out T value) where T : TBase;
+
+        /// <summary>
+        /// 등록된 클래스 객체를 반환합니다.        
+        /// </summary>
+        /// <typeparam name="T">객체의 타입</typeparam>
+        /// <param name="value">등록된 클래스 객체</param>
+        /// <returns>반환할 수 있는지 여부</returns>
+        bool Contains<T>() where T : TBase;
     }
 }

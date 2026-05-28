@@ -18,14 +18,20 @@ namespace AMBehaviorSystem.Core
         /// </summary>
         /// <typeparam name="T">객체의 타입</typeparam>
         /// <returns>등록된 클래스 객체</returns>
-        public T Get<T>() where T : TBase => (T)items[typeof(T)];
+        public T Get<T>() where T : TBase
+        {
+            return (T)items[typeof(T)];
+        }
 
         /// <summary>
         /// 등록된 클래스 객체를 반환합니다.
         /// </summary>
         /// <param name="type">객체의 자료형</param>
         /// <returns>등록된 클래스 객체</returns>
-        public object Get(Type type) => items[type];
+        public object Get(Type type)
+        {
+            return items[type];
+        }
 
         /// <summary>
         /// 등록된 클래스 객체를 반환합니다.        
@@ -56,6 +62,26 @@ namespace AMBehaviorSystem.Core
             var result = items.TryGetValue(type, out var item);
             value = item;
             return result;
+        }
+
+        /// <summary>
+        /// 지정된 타입의 객체가 등록되어 있는지 확인합니다.
+        /// </summary>
+        /// <typeparam name="T">확인할 타입</typeparam>
+        /// <returns></returns>
+        public bool Contains<T>() where T : TBase
+        {
+            return items.ContainsKey(typeof(T));
+        }
+
+        /// <summary>
+        /// 지정된 타입의 객체가 등록되어 있는지 확인합니다.
+        /// </summary>
+        /// <param name="type">확인할 타입</param>
+        /// <returns></returns>
+        public bool Contains(Type type)
+        {
+            return items.ContainsKey(type);
         }
 
         /// <summary>
@@ -107,15 +133,15 @@ namespace AMBehaviorSystem.Core
             return result;
         }
 
-        [SerializeReference] private List<TBase> serializedObjects = new();
+        [field: SerializeReference] public List<TBase> SerializedObjects { get; protected set; } = new();
 
         public void OnBeforeSerialize() { }
 
         public void OnAfterDeserialize()
         {
-            for(int i = 0; i < serializedObjects.Count; i++)
+            for(int i = 0; i < SerializedObjects.Count; i++)
             {
-                Register(serializedObjects[i]);
+                Register(SerializedObjects[i]);
             }
         }
     }

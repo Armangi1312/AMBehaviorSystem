@@ -38,27 +38,29 @@ namespace AMBehaviorSystem.Core
 
         protected bool IsInitialized;
 
-
-        protected void Initialize()
+        #region 초기화
+        protected virtual void Initialize()
         {
-            if(IsInitialized) return;
+            if (IsInitialized) return;
             IsInitialized = true;
 
-
+            ValidateDependencies();
+            InitializeProcessors();
+            InitializePipeline();
+            RegistryEvent();
         }
 
         private void InitializeProcessors()
         {
-            for(int i = 0; i < processors.Count; i++)
+            for (int i = 0; i < processors.Count; i++)
             {
-                var processor = processors[i];
+                TProcessor processor = processors[i];
 
                 if (processor == null)
                 {
-                    Debug.LogWarning($"{processor}은(는) NULL입니다.");
+                    Debug.LogWarning($"Processor at index {i} is null.");
                     continue;
                 }
-
 
                 processor.Initialize(settings, contexts);
             }
@@ -68,20 +70,155 @@ namespace AMBehaviorSystem.Core
         {
             //Pipeline = PipelineFactory.CreatePipeline(Graph);
         }
+        #endregion
+
+        #region 의존성 검증
 
         protected void ValidateDependencies()
         {
-
+            CollectDependencies(out List<Type> settingTypes, out List<Type> contextTypes);
+            SyncDependencies(settingTypes, contextTypes);
         }
 
-        private void ValidateProcessorDependencies()
+        private void CollectDependencies(out List<Type> settingTypes, out List<Type> contextTypes)
+        {
+            settingTypes = new List<Type>();
+            contextTypes = new List<Type>();
+
+            for (int i = 0; i < processors.Count; i++)
+            {
+                TProcessor processor = processors[i];
+                if (processor == null) continue;
+
+                (Type[] Context, Type[] Setting) dependencies = ProcessorDependencyValidator.GetRequiredTypes(processor.GetType());
+
+                settingTypes.AddRange(dependencies.Setting);
+                contextTypes.AddRange(dependencies.Context);
+            }
+        }
+
+        private void SyncDependencies(List<Type> settingTypes, List<Type> contextTypes)
+        {
+            SyncSettingDependencies(settingTypes);
+            SyncContextDependencies(contextTypes);
+        }
+
+        private void SyncSettingDependencies(List<Type> settingTypes)
+        {
+            for (int i = 0; i < settingTypes.Count; i++)
+            {
+                Type settingType = settingTypes[i];
+
+                if (!Settings.Contains(settingType))
+                    Settings.Register(Activator.CreateInstance(settingType));
+            }
+        }
+
+        private void SyncContextDependencies(List<Type> contextTypes)
+        {
+            for (int i = 0; i < contextTypes.Count; i++)
+            {
+                Type contextType = contextTypes[i];
+
+                if (!Contexts.Contains(contextType))
+                    Contexts.Register(Activator.CreateInstance(contextType));
+            }
+        }
+
+        #endregion
+
+        #region 이벤트 핸들러 등록
+
+        protected virtual void RegistryEvent()
+        {
+            settings.OnUnregistered += OnSettingUnregistered;
+            contexts.OnUnregistered += OnContextUnregistered;
+            processors.OnAdded += OnProcessorAdded;
+        }
+
+        protected virtual void UnregistryEvent()
+        {
+            settings.OnUnregistered -= OnSettingUnregistered;
+            contexts.OnUnregistered -= OnContextUnregistered;
+            processors.OnAdded -= OnProcessorAdded;
+        }
+
+        private void OnSettingUnregistered(Type type, TSetting setting)
+        {
+            ValidateDependencies();
+        }
+
+        private void OnContextUnregistered(Type type, TContext context)
+        {
+            ValidateDependencies();
+        }
+
+        private void OnProcessorAdded(TProcessor processor)
+        {
+            if (processor == null) return;
+
+            ValidateDependencies();
+            processor.Initialize(settings, contexts);
+        }
+
+        #endregion
+
+        #region 실행
+        protected virtual void InvokeProcessors(InvokeTiming timing)
         {
             for (int i = 0; i < processors.Count; i++)
             {
-                var processor = processors[i];
+                TProcessor processor = processors[i];
 
-                (Type[] Context, Type[] Setting, Type[] Processor) dependencies = ProcessorDependencyValidator.GetRequiredTypes(processor.GetType());
+                if (processor == null || (processor.InvokeTiming & timing) == 0) 
+                    continue;
+
+                processor.Process();
             }
         }
+
+        private void Awake()
+        {
+            Initialize();
+
+            InvokeProcessors(InvokeTiming.Awake);
+        }
+
+        private void Start()
+        {
+            InvokeProcessors(InvokeTiming.Start);
+        }
+
+        private void Update()
+        {
+            InvokeProcessors(InvokeTiming.Update);
+        }
+
+        private void FixedUpdate()
+        {
+            InvokeProcessors(InvokeTiming.FixedUpdate);
+        }
+
+        private void LateUpdate()
+        {
+            InvokeProcessors(InvokeTiming.LateUpdate);
+        }
+
+        private void OnDestroy()
+        {
+            InvokeProcessors(InvokeTiming.Destroy);
+            UnregistryEvent();
+        }
+
+        private void OnEnable()
+        {
+            InvokeProcessors(InvokeTiming.OnEnable);
+        }
+
+        private void OnDisable()
+        {
+            InvokeProcessors(InvokeTiming.OnDisable);
+        }
+        #endregion
     }
 }
