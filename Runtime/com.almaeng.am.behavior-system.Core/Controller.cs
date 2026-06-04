@@ -6,7 +6,9 @@ using UnityEngine;
 
 namespace AMBehaviorSystem.Core
 {
-    public partial class Controller<TSetting, TContext, TProcessor> : MonoBehaviour
+    public abstract class Controller : MonoBehaviour { }
+
+    public abstract partial class Controller<TSetting, TContext, TProcessor> : Controller
         where TSetting : ISetting
         where TContext : IContext
         where TProcessor : Processor<TSetting, TContext>
@@ -16,29 +18,28 @@ namespace AMBehaviorSystem.Core
         /// <summary>
         /// 런타임 준불변 데이터를 저장하는 객체입니다.
         /// </summary>
-        public Registry<TSetting> Settings => settings;
-        [SerializeField] private ObservableRegistry<TSetting> settings = new();
+        [field: SerializeReference] public ObservableRegistry<TSetting> Settings { get; protected set; } = new();
 
         /// <summary>
         /// 런타임 가변 데이터를 저장하는 객체입니다.
         /// </summary>
-        public Registry<TContext> Contexts => contexts;
-        [SerializeField] private ObservableRegistry<TContext> contexts = new();
+        [field: SerializeReference] public ObservableRegistry<TContext> Contexts { get; protected set; } = new();
 
         /// <summary>
-        /// 게임 로직을 처리하는 모듈 단위의 프로세서를 저장하는 객체입니다.
+        /// 게임 로직을 처리하는 모듈 단위의 프로세서를 저장하는 컬렉션입니다.
         /// </summary>
-        public List<TProcessor> Processors => processors;
-        [SerializeField] private ObservableList<TProcessor> processors = new();
+        [field: SerializeReference] public ObservableList<TProcessor> Processors { get; protected set; } = new();
 
-        //[SerializeField] protected PipelineGraph Graph;
+        // TODO: Pipeline 시스템 연동 시 활성화
+        // [SerializeReference] protected PipelineGraph Graph;
         public Pipeline Pipeline { get; private set; }
 
         //==== 내부 프로퍼티 ====//
 
-        protected bool IsInitialized;
+        [NonSerialized] protected bool IsInitialized = false;
 
         #region 초기화
+
         protected virtual void Initialize()
         {
             if (IsInitialized) return;
@@ -47,178 +48,174 @@ namespace AMBehaviorSystem.Core
             ValidateDependencies();
             InitializeProcessors();
             InitializePipeline();
-            RegistryEvent();
+            SubscribeEvents();
         }
 
         private void InitializeProcessors()
         {
-            for (int i = 0; i < processors.Count; i++)
+            for (int i = 0; i < Processors.Count; i++)
             {
-                TProcessor processor = processors[i];
-
+                TProcessor processor = Processors[i];
                 if (processor == null)
                 {
                     Debug.LogWarning($"Processor at index {i} is null.");
                     continue;
                 }
 
-                processor.Initialize(settings, contexts);
+                try
+                {
+                    processor.Initialize(Settings, Contexts);
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError($"Failed to initialize processor '{processor.GetType().Name}': {e}");
+                }
             }
         }
 
         private void InitializePipeline()
         {
-            //Pipeline = PipelineFactory.CreatePipeline(Graph);
+            // TODO: Pipeline 시스템 연동 시 활성화
+            // Pipeline = PipelineFactory.CreatePipeline(Graph);
         }
+
         #endregion
 
         #region 의존성 검증
 
         protected void ValidateDependencies()
         {
-            CollectDependencies(out List<Type> settingTypes, out List<Type> contextTypes);
+            Debug.Log("Test");
+            CollectDependencies(out HashSet<Type> settingTypes, out HashSet<Type> contextTypes);
             SyncDependencies(settingTypes, contextTypes);
         }
 
-        private void CollectDependencies(out List<Type> settingTypes, out List<Type> contextTypes)
+        private void CollectDependencies(out HashSet<Type> settingTypes, out HashSet<Type> contextTypes)
         {
-            settingTypes = new List<Type>();
-            contextTypes = new List<Type>();
+            settingTypes = new HashSet<Type>();
+            contextTypes = new HashSet<Type>();
 
-            for (int i = 0; i < processors.Count; i++)
+            for (int i = 0; i < Processors.Count; i++)
             {
-                TProcessor processor = processors[i];
+                TProcessor processor = Processors[i];
                 if (processor == null) continue;
 
-                (Type[] Context, Type[] Setting) dependencies = ProcessorDependencyValidator.GetRequiredTypes(processor.GetType());
+                (Type[] contexts, Type[] settings) = ProcessorDependencyValidator.GetRequiredTypes(processor.GetType());
 
-                settingTypes.AddRange(dependencies.Setting);
-                contextTypes.AddRange(dependencies.Context);
+                settingTypes.UnionWith(settings);
+                contextTypes.UnionWith(contexts);
+
+                Debug.Log($"Required types for {processor.GetType().Name}: Settings = [{string.Join<Type>(", ", settings)}], Contexts = [{string.Join<Type>(", ", contexts)}]");
             }
         }
 
-        private void SyncDependencies(List<Type> settingTypes, List<Type> contextTypes)
+        private void SyncDependencies(HashSet<Type> settingTypes, HashSet<Type> contextTypes)
         {
-            SyncSettingDependencies(settingTypes);
-            SyncContextDependencies(contextTypes);
+            SyncRegistryDependencies(settingTypes, Settings, "setting");
+            SyncRegistryDependencies(contextTypes, Contexts, "context");
         }
 
-        private void SyncSettingDependencies(List<Type> settingTypes)
+        private static void SyncRegistryDependencies<T>(HashSet<Type> types, ObservableRegistry<T> registry, string label)
         {
-            for (int i = 0; i < settingTypes.Count; i++)
+            foreach (Type type in types)
             {
-                Type settingType = settingTypes[i];
+                if (type == null || registry.Contains(type))
+                {
+                    Debug.Log($"[Sync] Skip {label}: {type?.Name} (null={type == null}, contains={type != null && registry.Contains(type)})");
+                    continue;
+                }
 
-                if (!Settings.Contains(settingType))
-                    Settings.Register(Activator.CreateInstance(settingType));
+                if (!TryCreateInstance(type, out object instance))
+                {
+                    Debug.LogError($"Cannot create {label} instance: {type}");
+                    continue;
+                }
+
+                registry.Register(instance);
+                Debug.Log($"[Sync] Registered {label}: {type.Name}");
             }
         }
 
-        private void SyncContextDependencies(List<Type> contextTypes)
+        private static bool TryCreateInstance(Type type, out object instance)
         {
-            for (int i = 0; i < contextTypes.Count; i++)
-            {
-                Type contextType = contextTypes[i];
+            instance = null;
 
-                if (!Contexts.Contains(contextType))
-                    Contexts.Register(Activator.CreateInstance(contextType));
+            try
+            {
+                instance = Activator.CreateInstance(type);
+                return instance != null;
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Failed to create instance of '{type}': {e.Message}");
+                return false;
             }
         }
 
         #endregion
 
-        #region 이벤트 핸들러 등록
+        #region 이벤트 구독
 
-        protected virtual void RegistryEvent()
+        protected virtual void SubscribeEvents()
         {
-            settings.OnUnregistered += OnSettingUnregistered;
-            contexts.OnUnregistered += OnContextUnregistered;
-            processors.OnAdded += OnProcessorAdded;
+            Settings.OnUnregistered += OnSettingUnregistered;
+            Contexts.OnUnregistered += OnContextUnregistered;
+            Processors.OnAdded += OnProcessorAdded;
         }
 
-        protected virtual void UnregistryEvent()
+        protected virtual void UnsubscribeEvents()
         {
-            settings.OnUnregistered -= OnSettingUnregistered;
-            contexts.OnUnregistered -= OnContextUnregistered;
-            processors.OnAdded -= OnProcessorAdded;
+            Settings.OnUnregistered -= OnSettingUnregistered;
+            Contexts.OnUnregistered -= OnContextUnregistered;
+            Processors.OnAdded -= OnProcessorAdded;
         }
 
-        private void OnSettingUnregistered(Type type, TSetting setting)
-        {
-            ValidateDependencies();
-        }
-
-        private void OnContextUnregistered(Type type, TContext context)
-        {
-            ValidateDependencies();
-        }
+        private void OnSettingUnregistered(Type _, TSetting __) => ValidateDependencies();
+        private void OnContextUnregistered(Type _, TContext __) => ValidateDependencies();
 
         private void OnProcessorAdded(TProcessor processor)
         {
             if (processor == null) return;
 
             ValidateDependencies();
-            processor.Initialize(settings, contexts);
+            processor.Initialize(Settings, Contexts);
         }
 
         #endregion
 
         #region 실행
+
         protected virtual void InvokeProcessors(InvokeTiming timing)
         {
-            for (int i = 0; i < processors.Count; i++)
+            for (int i = 0; i < Processors.Count; i++)
             {
-                TProcessor processor = processors[i];
-
-                if (processor == null || (processor.InvokeTiming & timing) == 0) 
-                    continue;
+                TProcessor processor = Processors[i];
+                if (processor == null || (processor.InvokeTiming & timing) == 0) continue;
 
                 processor.Process();
             }
         }
 
-        private void Awake()
-        {
-            Initialize();
-
-            InvokeProcessors(InvokeTiming.Awake);
-        }
-
-        private void Start()
-        {
-            InvokeProcessors(InvokeTiming.Start);
-        }
-
-        private void Update()
+        private void Awake() { Initialize(); InvokeProcessors(InvokeTiming.Awake); }
+        private void Start() => InvokeProcessors(InvokeTiming.Start);
+        //        private void Update() => InvokeProcessors(InvokeTiming.Update);
+        private void Update() 
         {
             InvokeProcessors(InvokeTiming.Update);
+            
+            Debug.Log($"Context Count: {Contexts.SerializedObjects.Count}, Setting Count: {Settings.SerializedObjects.Count}");
         }
-
-        private void FixedUpdate()
-        {
-            InvokeProcessors(InvokeTiming.FixedUpdate);
-        }
-
-        private void LateUpdate()
-        {
-            InvokeProcessors(InvokeTiming.LateUpdate);
-        }
+        private void FixedUpdate() => InvokeProcessors(InvokeTiming.FixedUpdate);
+        private void LateUpdate() => InvokeProcessors(InvokeTiming.LateUpdate);
+        private void OnEnable() => InvokeProcessors(InvokeTiming.OnEnable);
+        private void OnDisable() => InvokeProcessors(InvokeTiming.OnDisable);
 
         private void OnDestroy()
         {
             InvokeProcessors(InvokeTiming.Destroy);
-            UnregistryEvent();
+            UnsubscribeEvents();
         }
 
-        private void OnEnable()
-        {
-            InvokeProcessors(InvokeTiming.OnEnable);
-        }
-
-        private void OnDisable()
-        {
-            InvokeProcessors(InvokeTiming.OnDisable);
-        }
         #endregion
     }
 }

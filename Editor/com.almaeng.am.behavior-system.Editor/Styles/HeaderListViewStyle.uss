@@ -1,0 +1,19 @@
+.listview-header {
+    background-color: rgb(53, 53, 53);
+    padding-left: 5px;
+    padding-top: 2px;
+    padding-bottom: 1px;
+    min-height: 19px;
+    justify-content: center;
+    border-width: 1px;
+    border-color: rgb(36, 36, 36);
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.listview-header-label {
+    color: rgb(180, 180, 180);
+
+    font-size: 12px;
+}
