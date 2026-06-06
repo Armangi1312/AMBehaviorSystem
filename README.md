@@ -85,10 +85,33 @@ public class ExSetting1 : IExSetting
     public float JumpHeight;
 
     // [SerializeField] 필드 예시.
-    [SerializeField] private float Speed
+    [SerializeField] private float Speed;
     [SerializeField] private float JumpHeight;
 
-    [field: SerializeField] public float MaxHealth ;
+    // [field: SerializeField] 필드 예시.
+    [field: SerializeField] public float MaxHealth;
+}
+```
 
+#### Context
+
+```csharp
+// ISetting을 상속받는 인터페이스를 정의하여 Setting을 정의하는 것이 권장됩니다.
+public interface IExContext : IContext {}
+
+// 직렬화가 가능해야 하며, IContext 또는 IContext을 구현하는 인터페이스를 상속 받아야 합니다.
+[Serializable]
+public class ExContext1 : IExContext
+{
+    // Public 필드 예시.
+    public float CurrentVelocity;
+    public float CurrentHealth;
+
+    // [SerializeField] 필드 예시.
+    [SerializeField] private float CurrentVelocity;
+    [SerializeField] private float CurrentHealth;
+
+    // [field: SerializeField] 필드 예시.
+    [field: SerializeField] public float CurrentMana;
 }
 ```

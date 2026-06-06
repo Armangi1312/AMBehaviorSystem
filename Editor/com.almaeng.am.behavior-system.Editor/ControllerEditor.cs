@@ -9,6 +9,8 @@ namespace AMBehaviorSystem.Editor
     [CustomEditor(typeof(Controller), true)]
     internal class ControllerEditor : UnityEditor.Editor
     {
+        private const int SettingTypeIndex = 0;
+        private const int ContextTypeIndex = 1;
         private const int ProcessorTypeIndex = 2;
 
         private Controller controller;
@@ -22,7 +24,9 @@ namespace AMBehaviorSystem.Editor
 
             settingsProperty = serializedObject.FindProperty("<Settings>k__BackingField");
             contextsProperty = serializedObject.FindProperty("<Contexts>k__BackingField");
-            processorsProperty = serializedObject.FindProperty("<Processors>k__BackingField").FindPropertyRelative("Items");
+            processorsProperty = serializedObject
+                .FindProperty("<Processors>k__BackingField")
+                .FindPropertyRelative("Items");
         }
 
         public override VisualElement CreateInspectorGUI()
@@ -31,17 +35,40 @@ namespace AMBehaviorSystem.Editor
 
             root.Add(new PropertyField(serializedObject.FindProperty("m_Script"), "Script") { enabledSelf = false });
 
-            PropertyField settingsField = new(settingsProperty);
-            settingsField.style.marginTop = 8;
-            root.Add(settingsField);
-
-            PropertyField contextsField = new(contextsProperty);
-            contextsField.style.marginTop = 8;
-            root.Add(contextsField);
-
-            if (TryGetProcessorType(out Type processorType))
+            if (TryGetGenericType(ContextTypeIndex, out Type contextType))
             {
-                ProcessorListField processorListField = new(processorsProperty, processorsProperty, processorType);
+                RegistryField contextsField = new(
+                    contextsProperty,
+                    contextsProperty.FindPropertyRelative("<SerializedObjects>k__BackingField"),
+                    contextType,
+                    removalValidator: controller.IsContextRequired,
+                    onChanged: InvokeValidateAndRepaint
+                );
+                contextsField.style.marginTop = 8;
+                root.Add(contextsField);
+            }
+
+            if (TryGetGenericType(SettingTypeIndex, out Type settingType))
+            {
+                RegistryField settingsField = new(
+                    settingsProperty,
+                    settingsProperty.FindPropertyRelative("<SerializedObjects>k__BackingField"),
+                    settingType,
+                    removalValidator: controller.IsSettingRequired,
+                    onChanged: InvokeValidateAndRepaint
+                );
+                settingsField.style.marginTop = 8;
+                root.Add(settingsField);
+            }
+
+            if (TryGetGenericType(ProcessorTypeIndex, out Type processorType))
+            {
+                ProcessorListField processorListField = new(
+                    processorsProperty,
+                    processorType,
+                    controller,
+                    onChanged: InvokeValidateAndRepaint
+                );
                 processorListField.style.marginTop = 8;
                 root.Add(processorListField);
             }
@@ -49,18 +76,25 @@ namespace AMBehaviorSystem.Editor
             return root;
         }
 
-        private bool TryGetProcessorType(out Type processorType)
+        private void InvokeValidateAndRepaint()
         {
-            processorType = null;
+            EditorUtility.SetDirty(controller);
+            serializedObject.Update();
+            EditorApplication.delayCall += () => Repaint();
+        }
+
+        private bool TryGetGenericType(int index, out Type type)
+        {
+            type = null;
 
             if (!GenericUtilities.TryResolveInheritedElementTypes(controller.GetType(), out Type[] types))
                 return false;
 
-            if (types.Length <= ProcessorTypeIndex)
+            if (types.Length <= index)
                 return false;
 
-            processorType = types[ProcessorTypeIndex];
-            return processorType != null;
+            type = types[index];
+            return type != null;
         }
     }
 }

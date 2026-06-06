@@ -6,7 +6,12 @@ using UnityEngine;
 
 namespace AMBehaviorSystem.Core
 {
-    public abstract class Controller : MonoBehaviour { }
+    public abstract class Controller : MonoBehaviour 
+    {
+        public abstract void ValidateDependencies();
+        public abstract bool IsSettingRequired(Type type);
+        public abstract bool IsContextRequired(Type type);
+    }
 
     public abstract partial class Controller<TSetting, TContext, TProcessor> : Controller
         where TSetting : ISetting
@@ -51,7 +56,7 @@ namespace AMBehaviorSystem.Core
             SubscribeEvents();
         }
 
-        private void InitializeProcessors()
+        protected virtual void InitializeProcessors()
         {
             for (int i = 0; i < Processors.Count; i++)
             {
@@ -73,7 +78,7 @@ namespace AMBehaviorSystem.Core
             }
         }
 
-        private void InitializePipeline()
+        protected virtual void InitializePipeline()
         {
             // TODO: Pipeline 시스템 연동 시 활성화
             // Pipeline = PipelineFactory.CreatePipeline(Graph);
@@ -83,14 +88,13 @@ namespace AMBehaviorSystem.Core
 
         #region 의존성 검증
 
-        protected void ValidateDependencies()
+        public override void ValidateDependencies()
         {
-            Debug.Log("Test");
             CollectDependencies(out HashSet<Type> settingTypes, out HashSet<Type> contextTypes);
             SyncDependencies(settingTypes, contextTypes);
         }
 
-        private void CollectDependencies(out HashSet<Type> settingTypes, out HashSet<Type> contextTypes)
+        protected void CollectDependencies(out HashSet<Type> settingTypes, out HashSet<Type> contextTypes)
         {
             settingTypes = new HashSet<Type>();
             contextTypes = new HashSet<Type>();
@@ -104,26 +108,20 @@ namespace AMBehaviorSystem.Core
 
                 settingTypes.UnionWith(settings);
                 contextTypes.UnionWith(contexts);
-
-                Debug.Log($"Required types for {processor.GetType().Name}: Settings = [{string.Join<Type>(", ", settings)}], Contexts = [{string.Join<Type>(", ", contexts)}]");
             }
         }
 
-        private void SyncDependencies(HashSet<Type> settingTypes, HashSet<Type> contextTypes)
+        protected void SyncDependencies(HashSet<Type> settingTypes, HashSet<Type> contextTypes)
         {
             SyncRegistryDependencies(settingTypes, Settings, "setting");
             SyncRegistryDependencies(contextTypes, Contexts, "context");
         }
 
-        private static void SyncRegistryDependencies<T>(HashSet<Type> types, ObservableRegistry<T> registry, string label)
+        protected static void SyncRegistryDependencies<T>(HashSet<Type> types, ObservableRegistry<T> registry, string label)
         {
             foreach (Type type in types)
             {
-                if (type == null || registry.Contains(type))
-                {
-                    Debug.Log($"[Sync] Skip {label}: {type?.Name} (null={type == null}, contains={type != null && registry.Contains(type)})");
-                    continue;
-                }
+                if (type == null || registry.Contains(type)) continue;
 
                 if (!TryCreateInstance(type, out object instance))
                 {
@@ -132,8 +130,25 @@ namespace AMBehaviorSystem.Core
                 }
 
                 registry.Register(instance);
-                Debug.Log($"[Sync] Registered {label}: {type.Name}");
             }
+        }
+
+        public override bool IsSettingRequired(Type type)
+        {
+            CollectDependencies(out HashSet<Type> settingTypes, out _);
+            if (!settingTypes.Contains(type)) return false;
+
+            Debug.LogWarning($"[Controller] Cannot remove setting '{type.Name}': required by one or more processors.");
+            return true;
+        }
+
+        public override bool IsContextRequired(Type type)
+        {
+            CollectDependencies(out _, out HashSet<Type> contextTypes);
+            if (!contextTypes.Contains(type)) return false;
+
+            Debug.LogWarning($"[Controller] Cannot remove context '{type.Name}': required by one or more processors.");
+            return true;
         }
 
         private static bool TryCreateInstance(Type type, out object instance)
@@ -170,8 +185,17 @@ namespace AMBehaviorSystem.Core
             Processors.OnAdded -= OnProcessorAdded;
         }
 
-        private void OnSettingUnregistered(Type _, TSetting __) => ValidateDependencies();
-        private void OnContextUnregistered(Type _, TContext __) => ValidateDependencies();
+        private void OnSettingUnregistered(Type type, TSetting _)
+        {
+            if (IsSettingRequired(type))
+                ValidateDependencies();
+        }
+
+        private void OnContextUnregistered(Type type, TContext _)
+        {
+            if (IsContextRequired(type))
+                ValidateDependencies();
+        }
 
         private void OnProcessorAdded(TProcessor processor)
         {
@@ -198,13 +222,7 @@ namespace AMBehaviorSystem.Core
 
         private void Awake() { Initialize(); InvokeProcessors(InvokeTiming.Awake); }
         private void Start() => InvokeProcessors(InvokeTiming.Start);
-        //        private void Update() => InvokeProcessors(InvokeTiming.Update);
-        private void Update() 
-        {
-            InvokeProcessors(InvokeTiming.Update);
-            
-            Debug.Log($"Context Count: {Contexts.SerializedObjects.Count}, Setting Count: {Settings.SerializedObjects.Count}");
-        }
+        private void Update() => InvokeProcessors(InvokeTiming.Update);
         private void FixedUpdate() => InvokeProcessors(InvokeTiming.FixedUpdate);
         private void LateUpdate() => InvokeProcessors(InvokeTiming.LateUpdate);
         private void OnEnable() => InvokeProcessors(InvokeTiming.OnEnable);

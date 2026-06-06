@@ -1,93 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using AMBehaviorSystem.Core;
+using System;
 using UnityEditor;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace AMBehaviorSystem.Editor
 {
-    internal sealed class ProcessorListField : VisualElement
+    internal sealed class ProcessorListField : BaseListField
     {
-        private readonly SerializedProperty arrayProperty;
-        private readonly SerializedObject serializedObject;
-        private readonly ListView listView;
-        private readonly List<Type> registeredTypes = new();
-        private readonly List<int> indexSource = new();
-        private readonly Type[] candidateTypes;
+        private readonly Controller controller;
 
-        public ProcessorListField(SerializedProperty processorProperty, SerializedProperty arrayProperty, Type processorType)
+        public ProcessorListField(SerializedProperty arrayProperty, Type processorType, Controller controller, Action onChanged = null)
+            : base(arrayProperty, processorType, "Processors", onChanged)
         {
-            this.arrayProperty = arrayProperty;
-            serializedObject = processorProperty.serializedObject;
-
-            LoadStyleSheet();
-
-            candidateTypes = GenericUtilities.CollectInheritedTypes(processorType);
-
-            RebuildSources();
-
-            Add(BuildHeader());
-            listView = BuildListView();
-            Add(listView);
+            this.controller = controller;
         }
 
-        private void LoadStyleSheet()
-        {
-            string[] guids = AssetDatabase.FindAssets("HeaderListViewStyle t:StyleSheet");
-            if (guids.Length == 0) return;
-
-            string path = AssetDatabase.GUIDToAssetPath(guids[0]);
-            StyleSheet styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(path);
-            if (styleSheet != null)
-                styleSheets.Add(styleSheet);
-        }
-
-        private static VisualElement BuildHeader()
-        {
-            VisualElement header = new();
-            header.AddToClassList("listview-header");
-
-            Label label = new("Processors");
-            label.AddToClassList("listview-header-label");
-            header.Add(label);
-
-            return header;
-        }
-
-        private ListView BuildListView()
-        {
-            ListView lv = new()
-            {
-                reorderable = true,
-                showFoldoutHeader = false,
-                showAddRemoveFooter = true,
-                showBorder = true,
-                reorderMode = ListViewReorderMode.Animated,
-                virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight,
-                itemsSource = indexSource,
-                makeItem = MakeItem,
-                bindItem = BindItem,
-                unbindItem = UnbindItem,
-                overridingAddButtonBehavior = (_, _) => ShowAddMenu(),
-                onRemove = _ => OnRemoveClicked(),
-            };
-
-            lv.itemIndexChanged += OnItemIndexChanged;
-            lv.style.flexGrow = 1;
-            lv.style.minHeight = 20;
-
-            return lv;
-        }
-
-        private void OnItemIndexChanged(int oldIndex, int newIndex)
-        {
-            serializedObject.Update();
-            arrayProperty.MoveArrayElement(oldIndex, newIndex);
-            serializedObject.ApplyModifiedProperties();
-            Refresh();
-        }
-
-        private static VisualElement MakeItem()
+        protected override VisualElement MakeItem()
         {
             Label label = new();
             label.style.paddingLeft = 4;
@@ -96,7 +24,7 @@ namespace AMBehaviorSystem.Editor
             return label;
         }
 
-        private void BindItem(VisualElement element, int index)
+        protected override void BindItem(VisualElement element, int index)
         {
             if (index >= arrayProperty.arraySize) return;
 
@@ -104,79 +32,26 @@ namespace AMBehaviorSystem.Editor
             ((Label)element).text = itemProperty.managedReferenceValue?.GetType().Name ?? "Null";
         }
 
-        private static void UnbindItem(VisualElement element, int _)
+        protected override void UnbindItem(VisualElement element, int index)
         {
             ((Label)element).text = string.Empty;
         }
 
-        private void ShowAddMenu()
+        protected override void OnAfterAdd()
         {
-            GenericMenu menu = new();
-            bool any = false;
-
-            foreach (Type type in candidateTypes)
-            {
-                if (registeredTypes.Contains(type)) continue;
-
-                any = true;
-                Type cached = type;
-                menu.AddItem(new GUIContent(type.Name), false, () => AddItem(cached));
-            }
-
-            if (!any)
-                menu.AddDisabledItem(new GUIContent("No compatible types found"));
-
-            menu.ShowAsContext();
+            MarkControllerDirty();
         }
 
-        private void AddItem(Type type)
+        protected override void OnAfterRemove()
         {
-            if (registeredTypes.Contains(type)) return;
+            MarkControllerDirty();
+        }
 
+        private void MarkControllerDirty()
+        {
+            if (controller == null) return;
+            EditorUtility.SetDirty(controller);
             serializedObject.Update();
-
-            int index = arrayProperty.arraySize;
-            arrayProperty.InsertArrayElementAtIndex(index);
-            arrayProperty.GetArrayElementAtIndex(index).managedReferenceValue = Activator.CreateInstance(type);
-
-            serializedObject.ApplyModifiedProperties();
-            Refresh();
-        }
-
-        private void OnRemoveClicked()
-        {
-            int targetIndex = listView.selectedIndex >= 0
-                ? listView.selectedIndex
-                : arrayProperty.arraySize - 1;
-
-            if (targetIndex < 0 || targetIndex >= arrayProperty.arraySize) return;
-
-            serializedObject.Update();
-            arrayProperty.DeleteArrayElementAtIndex(targetIndex);
-            serializedObject.ApplyModifiedProperties();
-            Refresh();
-        }
-
-        private void Refresh()
-        {
-            RebuildSources();
-            listView.RefreshItems();
-        }
-
-        private void RebuildSources()
-        {
-            serializedObject.Update();
-            indexSource.Clear();
-            registeredTypes.Clear();
-
-            for (int i = 0; i < arrayProperty.arraySize; i++)
-            {
-                indexSource.Add(i);
-
-                object item = arrayProperty.GetArrayElementAtIndex(i).managedReferenceValue;
-                if (item != null)
-                    registeredTypes.Add(item.GetType());
-            }
         }
     }
 }
