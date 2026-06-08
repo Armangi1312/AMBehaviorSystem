@@ -1,6 +1,6 @@
 <p align="center">
-    <img src="Documentation~/Images/BannerDark.png#gh-dark-mode-only" width="500">
-    <img src="Documentation~/Images/BannerLight.png#gh-light-mode-only" width="500">
+    <img src="https://raw.githubusercontent.com/Armangi1312/AMBehaviorSystem/main/Documentation~/Images/BannerDark.png#gh-dark-mode-only" width="500">
+    <img src="https://raw.githubusercontent.com/Armangi1312/AMBehaviorSystem/main/Documentation~/Images/BannerLight.png#gh-light-mode-only" width="500">
 </p>
 
 <p align="center">
@@ -12,6 +12,12 @@
 > [!CAUTION]
 > 이 프로젝트는 현재 알파 단계로 안전하지 않을 수 있습니다.
 > [Github Issues](https://github.com/Armangi1312/AMBehaviorSystem/issues)에 버그를 보고해주시면 감사하겠습니다.
+
+---
+
+- [한국어](README.md)
+- [English](README_EN.md)
+- [中文]()
 
 ---
 
