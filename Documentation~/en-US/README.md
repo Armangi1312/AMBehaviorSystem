@@ -15,9 +15,9 @@
 
 ---
 
-- [한국어](https://github.com/Armangi1312/AMBehaviorSystem/tree/main/Documentation~/ko-KR/README.md)
-- [English](https://github.com/Armangi1312/AMBehaviorSystem/blob/main/Documentation~/en-US/README.md)
-- [中文](https://github.com/Armangi1312/AMBehaviorSystem/blob/main/Documentation~/zh-CN/README.md)
+- [한국어](README.md)
+- [English](README_EN.md)
+- [中文]()
 
 ---
 
