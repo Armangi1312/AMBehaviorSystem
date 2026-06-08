@@ -5,8 +5,8 @@
 
 <p align="center">
     <a href="https://github.com/Armangi1312/AMBehaviorSystem/releases"><img src="https://img.shields.io/github/v/release/Armangi1312/AMBehaviorSystem"/></a>
-    <a href="https://github.com/Armangi1312/AMBehaviorSystem/blob/main/LICENSE"><img src="https://img.shields.io/github/license/Armangi1312/AMBehaviorSystem"/></a>
-    <img src="https://img.shields.io/badge/Unity-2022.3%2B-black?logo=unity"/>
+    <a href="https://github.com/Armangi1312/AMBehaviorSystem/blob/main/LICENSE.md"><img src="https://img.shields.io/github/license/Armangi1312/AMBehaviorSystem"/></a>
+    <img src="https://img.shields.io/badge/Unity-6.0 LTS %2B-black?logo=unity"/>
 </p>
 
 > [!CAUTION]

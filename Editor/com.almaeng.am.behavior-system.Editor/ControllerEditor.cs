@@ -41,8 +41,7 @@ namespace AMBehaviorSystem.Editor
                     contextsProperty,
                     contextsProperty.FindPropertyRelative("<SerializedObjects>k__BackingField"),
                     contextType,
-                    removalValidator: controller.IsContextRequired,
-                    onChanged: InvokeValidateAndRepaint
+                    removalValidator: controller.IsContextRequired
                 );
                 contextsField.style.marginTop = 8;
                 root.Add(contextsField);
@@ -54,8 +53,7 @@ namespace AMBehaviorSystem.Editor
                     settingsProperty,
                     settingsProperty.FindPropertyRelative("<SerializedObjects>k__BackingField"),
                     settingType,
-                    removalValidator: controller.IsSettingRequired,
-                    onChanged: InvokeValidateAndRepaint
+                    removalValidator: controller.IsSettingRequired
                 );
                 settingsField.style.marginTop = 8;
                 root.Add(settingsField);
@@ -66,21 +64,13 @@ namespace AMBehaviorSystem.Editor
                 ProcessorListField processorListField = new(
                     processorsProperty,
                     processorType,
-                    controller,
-                    onChanged: InvokeValidateAndRepaint
+                    controller
                 );
                 processorListField.style.marginTop = 8;
                 root.Add(processorListField);
             }
 
             return root;
-        }
-
-        private void InvokeValidateAndRepaint()
-        {
-            EditorUtility.SetDirty(controller);
-            serializedObject.Update();
-            EditorApplication.delayCall += () => Repaint();
         }
 
         private bool TryGetGenericType(int index, out Type type)

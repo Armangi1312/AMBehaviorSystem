@@ -9,8 +9,8 @@ namespace AMBehaviorSystem.Editor
     {
         private readonly Controller controller;
 
-        public ProcessorListField(SerializedProperty arrayProperty, Type processorType, Controller controller, Action onChanged = null)
-            : base(arrayProperty, processorType, "Processors", onChanged)
+        public ProcessorListField(SerializedProperty arrayProperty, Type processorType, Controller controller)
+            : base(arrayProperty, processorType, "Processors")
         {
             this.controller = controller;
         }
@@ -39,18 +39,22 @@ namespace AMBehaviorSystem.Editor
 
         protected override void OnAfterAdd()
         {
-            MarkControllerDirty();
+            ControllerValidateDependencies();
+            Refresh();
         }
 
         protected override void OnAfterRemove()
         {
-            MarkControllerDirty();
+            ControllerValidateDependencies();
+            Refresh();
         }
 
-        private void MarkControllerDirty()
+        private void ControllerValidateDependencies()
         {
-            if (controller == null) return;
+            if(controller == null) return;
+
             EditorUtility.SetDirty(controller);
+            controller.ValidateDependencies();
             serializedObject.Update();
         }
     }

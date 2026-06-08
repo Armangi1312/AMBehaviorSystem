@@ -16,10 +16,15 @@ namespace AMBehaviorSystem.Editor
 
         private readonly Func<Type, bool> removalValidator;
 
-        public RegistryField(SerializedProperty registryProperty, SerializedProperty arrayProperty, Type registryType, Func<Type, bool> removalValidator = null, Action onChanged = null)
-            : base(arrayProperty, ResolveElementType(registryType), registryProperty.displayName, onChanged)
+        public RegistryField(SerializedProperty registryProperty, SerializedProperty arrayProperty, Type registryType, Func<Type, bool> removalValidator = null)
+            : base(arrayProperty, ResolveElementType(registryType), registryProperty.displayName)
         {
             this.removalValidator = removalValidator;
+
+            this.TrackSerializedObjectValue(serializedObject, @object =>
+            {
+                Refresh();
+            });
         }
 
         private static Type ResolveElementType(Type registryType)
@@ -112,7 +117,12 @@ namespace AMBehaviorSystem.Editor
 
         protected override void OnAfterAdd()
         {
-            EditorApplication.delayCall += Refresh;
+            Refresh();
+        }
+
+        protected override void OnAfterRemove()
+        {
+            Refresh();
         }
     }
 }

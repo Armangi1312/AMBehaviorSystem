@@ -13,13 +13,11 @@ namespace AMBehaviorSystem.Editor
         protected readonly List<Type> registeredTypes = new();
         protected readonly List<int> indexSource = new();
         protected readonly Type[] candidateTypes;
-        protected readonly Action onChanged;
         protected ListView listView;
 
-        protected BaseListField(SerializedProperty arrayProperty, Type elementType, string headerLabel, Action onChanged = null)
+        protected BaseListField(SerializedProperty arrayProperty, Type elementType, string headerLabel)
         {
             this.arrayProperty = arrayProperty;
-            this.onChanged = onChanged;
             serializedObject = arrayProperty.serializedObject;
 
             candidateTypes = GenericUtilities.CollectInheritedTypes(elementType);
@@ -85,7 +83,6 @@ namespace AMBehaviorSystem.Editor
             serializedObject.Update();
             arrayProperty.MoveArrayElement(oldIndex, newIndex);
             serializedObject.ApplyModifiedProperties();
-            onChanged?.Invoke();
             Refresh();
         }
 
@@ -120,7 +117,6 @@ namespace AMBehaviorSystem.Editor
             arrayProperty.GetArrayElementAtIndex(index).managedReferenceValue = Activator.CreateInstance(type);
 
             serializedObject.ApplyModifiedProperties();
-            onChanged?.Invoke();
             OnAfterAdd();
         }
 
@@ -136,7 +132,6 @@ namespace AMBehaviorSystem.Editor
             serializedObject.Update();
             arrayProperty.DeleteArrayElementAtIndex(targetIndex);
             serializedObject.ApplyModifiedProperties();
-            onChanged?.Invoke();
             OnAfterRemove();
         }
 
