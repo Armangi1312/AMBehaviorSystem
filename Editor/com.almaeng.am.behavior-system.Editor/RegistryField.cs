@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -10,28 +9,29 @@ namespace AMBehaviorSystem.Editor
 {
     internal sealed class RegistryField : BaseListField
     {
-        private const BindingFlags PublicInstanceDeclared = BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly;
-        private const BindingFlags NonPublicInstanceDeclared = BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.DeclaredOnly;
-        private const BindingFlags AllInstanceDeclared = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly;
+        private const BindingFlags InstanceDeclared = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly;
 
         private readonly Func<Type, bool> removalValidator;
 
         public RegistryField(SerializedProperty registryProperty, SerializedProperty arrayProperty, Type registryType, Func<Type, bool> removalValidator = null)
-            : base(arrayProperty, ResolveElementType(registryType), registryProperty.displayName)
+            : base(arrayProperty, registryType, registryProperty.displayName)
         {
             this.removalValidator = removalValidator;
 
-            this.TrackSerializedObjectValue(serializedObject, @object =>
-            {
-                Refresh();
-            });
-        }
+            int cachedSize = arrayProperty.arraySize;
 
-        private static Type ResolveElementType(Type registryType)
-        {
-            return GenericUtilities.TryResolveElementTypes(registryType, out Type[] elementTypes)
-                ? elementTypes[0]
-                : null;
+            schedule.Execute(() =>
+            {
+                if (arrayProperty.serializedObject.targetObject == null) return;
+
+                arrayProperty.serializedObject.Update();
+
+                int currentSize = arrayProperty.arraySize;
+                if (currentSize == cachedSize) return;
+
+                cachedSize = currentSize;
+                Refresh();
+            }).Every(100);
         }
 
         protected override VisualElement MakeItem() => new Foldout { value = true };
@@ -69,27 +69,28 @@ namespace AMBehaviorSystem.Editor
             Type type = itemProperty.managedReferenceValue?.GetType();
             if (type == null) return;
 
-            foreach (Type chainType in CollectTypeChain(type))
+            foreach (Type chainType in GenericUtilities.CollectTypeChain(type))
             {
-                foreach (FieldInfo field in chainType.GetFields(PublicInstanceDeclared))
+                foreach (FieldInfo field in chainType.GetFields(InstanceDeclared))
                 {
-                    if (field.IsDefined(typeof(NonSerializedAttribute), false)) continue;
+                    if (!IsSerializable(field)) continue;
                     AddPropertyField(foldout, itemProperty.FindPropertyRelative(field.Name));
                 }
 
-                foreach (FieldInfo field in chainType.GetFields(NonPublicInstanceDeclared))
-                {
-                    if (!field.IsDefined(typeof(SerializeField), false)) continue;
-                    AddPropertyField(foldout, itemProperty.FindPropertyRelative(field.Name));
-                }
-
-                foreach (PropertyInfo prop in chainType.GetProperties(AllInstanceDeclared))
+                foreach (PropertyInfo prop in chainType.GetProperties(InstanceDeclared))
                 {
                     if (!prop.IsDefined(typeof(SerializeField), false)) continue;
-                    string backingFieldName = $"<{prop.Name}>k__BackingField";
-                    AddPropertyField(foldout, itemProperty.FindPropertyRelative(backingFieldName));
+                    string backingField = $"<{prop.Name}>k__BackingField";
+                    AddPropertyField(foldout, itemProperty.FindPropertyRelative(backingField));
                 }
             }
+        }
+
+        private static bool IsSerializable(FieldInfo field)
+        {
+            if (field.IsDefined(typeof(NonSerializedAttribute), false)) return false;
+            if (field.IsPublic) return true;
+            return field.IsDefined(typeof(SerializeField), false);
         }
 
         private void AddPropertyField(Foldout foldout, SerializedProperty prop)
@@ -99,30 +100,6 @@ namespace AMBehaviorSystem.Editor
             PropertyField propertyField = new(prop);
             propertyField.Bind(serializedObject);
             foldout.Add(propertyField);
-        }
-
-        private static List<Type> CollectTypeChain(Type type)
-        {
-            List<Type> chain = new();
-            Type current = type;
-
-            while (current != null && current != typeof(object))
-            {
-                chain.Insert(0, current);
-                current = current.BaseType;
-            }
-
-            return chain;
-        }
-
-        protected override void OnAfterAdd()
-        {
-            Refresh();
-        }
-
-        protected override void OnAfterRemove()
-        {
-            Refresh();
         }
     }
 }

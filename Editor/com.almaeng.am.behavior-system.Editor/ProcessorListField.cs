@@ -39,19 +39,19 @@ namespace AMBehaviorSystem.Editor
 
         protected override void OnAfterAdd()
         {
-            ControllerValidateDependencies();
+            NotifyControllerChanged();
             Refresh();
         }
 
         protected override void OnAfterRemove()
         {
-            ControllerValidateDependencies();
+            NotifyControllerChanged();
             Refresh();
         }
 
-        private void ControllerValidateDependencies()
+        private void NotifyControllerChanged()
         {
-            if(controller == null) return;
+            if (controller == null) return;
 
             EditorUtility.SetDirty(controller);
             controller.ValidateDependencies();

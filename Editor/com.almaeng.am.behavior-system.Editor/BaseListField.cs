@@ -19,7 +19,6 @@ namespace AMBehaviorSystem.Editor
         {
             this.arrayProperty = arrayProperty;
             serializedObject = arrayProperty.serializedObject;
-
             candidateTypes = GenericUtilities.CollectInheritedTypes(elementType);
 
             LoadStyleSheet();
@@ -55,7 +54,7 @@ namespace AMBehaviorSystem.Editor
 
         private ListView BuildListView()
         {
-            ListView listView = new()
+            var lv = new ListView
             {
                 reorderable = true,
                 showFoldoutHeader = false,
@@ -71,11 +70,11 @@ namespace AMBehaviorSystem.Editor
                 onRemove = _ => OnRemoveClicked(),
             };
 
-            listView.itemIndexChanged += OnItemIndexChanged;
-            listView.style.flexGrow = 1;
-            listView.style.minHeight = 20;
+            lv.itemIndexChanged += OnItemIndexChanged;
+            lv.style.flexGrow = 1;
+            lv.style.minHeight = 20;
 
-            return listView;
+            return lv;
         }
 
         private void OnItemIndexChanged(int oldIndex, int newIndex)

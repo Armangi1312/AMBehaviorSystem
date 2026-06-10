@@ -98,5 +98,19 @@ namespace AMBehaviorSystem.Editor
             elementTypes = Array.Empty<Type>();
             return false;
         }
+
+        public static List<Type> CollectTypeChain(Type type)
+        {
+            List<Type> chain = new();
+            Type current = type;
+
+            while (current != null && current != typeof(object))
+            {
+                chain.Insert(0, current);
+                current = current.BaseType;
+            }
+
+            return chain;
+        }
     }
 }
