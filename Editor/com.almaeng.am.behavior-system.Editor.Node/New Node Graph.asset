@@ -1,0 +1,149 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efbe2842b031a0b4ba13f8bc722cd44c, type: 3}
+  m_Name: New Node Graph
+  m_EditorClassIdentifier: com.almaeng.am.behavior-system.Node::AMBehaviorSystem.Node.NodeGraph
+  serializedNodes: []
+  nodes:
+  - rid: 4477694332515909697
+  - rid: 4477694332515909698
+  - rid: 4477694332515909710
+  - rid: 4477694332515909711
+  - rid: 4477694332515909712
+  edges:
+  - GUID: 7c59340e-8e25-4e29-ae94-d1101be6aa0e
+    owner: {fileID: 11400000}
+    inputNodeGUID: 2c6a1639-74d4-41e7-8aa4-d083f65c63fc
+    outputNodeGUID: 5fd3bbe4-ef8f-4b42-bb67-7e7587243054
+    inputFieldName: Condition
+    outputFieldName: Out
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 1f8413c9-2a25-4840-93fd-e15b810cb506
+    owner: {fileID: 11400000}
+    inputNodeGUID: feb3c3fa-e8b4-4882-8100-ca055f6e7189
+    outputNodeGUID: 2c6a1639-74d4-41e7-8aa4-d083f65c63fc
+    inputFieldName: In
+    outputFieldName: True
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 4f3d885b-65f0-49f6-905e-8e8c66216212
+    owner: {fileID: 11400000}
+    inputNodeGUID: 1e0209b1-ee28-4661-875c-7efebe5e1ca7
+    outputNodeGUID: 2c6a1639-74d4-41e7-8aa4-d083f65c63fc
+    inputFieldName: In
+    outputFieldName: False
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 9ee58293-06ab-4953-8f90-3855ebea57a7
+    owner: {fileID: 11400000}
+    inputNodeGUID: 2c6a1639-74d4-41e7-8aa4-d083f65c63fc
+    outputNodeGUID: 8c649493-403f-4827-a53a-3daab0cb24e0
+    inputFieldName: In
+    outputFieldName: Entry
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  groups: []
+  stackNodes: []
+  pinnedElements: []
+  exposedParameters: []
+  serializedParameterList: []
+  stickyNotes: []
+  nodeInspectorReference: {fileID: 0}
+  position: {x: -2639, y: 1755, z: 0}
+  scale: {x: 1.7490063, y: 1.7490063, z: 1}
+  controllerReference:
+    targetID: GlobalObjectId_V1-2-b91fdef2f33e43f4f92a269c3d53c359-1916947743-0
+    target: {fileID: 0}
+  references:
+    version: 2
+    RefIds:
+    - rid: 4477694332515909697
+      type: {class: BooleanNode, ns: AMBehaviorSystem.Node.Primitives, asm: com.almaeng.am.behavior-system.Node}
+      data:
+        nodeCustomName: 
+        GUID: 5fd3bbe4-ef8f-4b42-bb67-7e7587243054
+        computeOrder: 0
+        position:
+          serializedVersion: 2
+          x: 1662.3418
+          y: -827.1209
+          width: 150
+          height: 93
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        Field: 0
+    - rid: 4477694332515909698
+      type: {class: ConditionNode, ns: AMBehaviorSystem.Node.Pipelines, asm: com.almaeng.am.behavior-system.Node}
+      data:
+        nodeCustomName: 
+        GUID: 2c6a1639-74d4-41e7-8aa4-d083f65c63fc
+        computeOrder: 2
+        position:
+          serializedVersion: 2
+          x: 1896.5
+          y: -851
+          width: 152
+          height: 123
+        expanded: 1
+        debug: 0
+        nodeLock: 0
+    - rid: 4477694332515909710
+      type: {class: InvokeNode, ns: AMBehaviorSystem.Node.Pipelines, asm: com.almaeng.am.behavior-system.Node}
+      data:
+        nodeCustomName: 
+        GUID: feb3c3fa-e8b4-4882-8100-ca055f6e7189
+        computeOrder: 3
+        position:
+          serializedVersion: 2
+          x: 2153.4556
+          y: -832.4737
+          width: 108
+          height: 125
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        ProcessorTypes:
+        - Assembly-CSharp Test.TestProcessor1
+    - rid: 4477694332515909711
+      type: {class: InvokeNode, ns: AMBehaviorSystem.Node.Pipelines, asm: com.almaeng.am.behavior-system.Node}
+      data:
+        nodeCustomName: 
+        GUID: 1e0209b1-ee28-4661-875c-7efebe5e1ca7
+        computeOrder: 4
+        position:
+          serializedVersion: 2
+          x: 2150.8452
+          y: -703.025
+          width: 108
+          height: 125
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        ProcessorTypes:
+        - Assembly-CSharp Test.TestProcessor2
+    - rid: 4477694332515909712
+      type: {class: EntryNode, ns: AMBehaviorSystem.Node.Pipelines, asm: com.almaeng.am.behavior-system.Node}
+      data:
+        nodeCustomName: 
+        GUID: 8c649493-403f-4827-a53a-3daab0cb24e0
+        computeOrder: 1
+        position:
+          serializedVersion: 2
+          x: 1663
+          y: -936.82
+          width: 122
+          height: 95
+        expanded: 0
+        debug: 0
+        nodeLock: 0

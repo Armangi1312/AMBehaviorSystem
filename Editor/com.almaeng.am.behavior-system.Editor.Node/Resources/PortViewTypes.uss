@@ -1,0 +1,28 @@
+#graphRootView
+{
+    background-color: #202020;
+}
+
+.Port_NumberPort {
+	--port-color: #84E4E7;
+}
+
+.Port_BooleanPort {
+	--port-color: #9481E6;
+}
+
+.Port_Vector2Port {
+	--port-color: #9AEF92;
+}
+
+.Port_Vector3Port {
+	--port-color: #F6FF9A;
+}
+
+.Port_Vector4Port {
+	--port-color: #FBCBF4;
+}
+
+.Port_PipelineFlowPort {
+	--port-color: #FF8B8B;
+}

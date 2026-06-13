@@ -9,8 +9,7 @@ namespace AMBehaviorSystem.Editor
     {
         private readonly Controller controller;
 
-        public ProcessorListField(SerializedProperty arrayProperty, Type processorType, Controller controller)
-            : base(arrayProperty, processorType, "Processors")
+        public ProcessorListField(SerializedProperty arrayProperty, Type processorType, Controller controller) : base(arrayProperty, processorType, "Processors")
         {
             this.controller = controller;
         }
