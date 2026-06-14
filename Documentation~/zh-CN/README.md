@@ -9,6 +9,11 @@
     <img src="https://img.shields.io/badge/Unity-2022.3%2B-black?logo=unity"/>
 </p>
 
+<p align="center">
+    <i>告别硬编码行为。<br>
+    使用 AM Behavior System，在运行时自由组合、替换并可视化您的行为。</i>
+</p>
+
 > [!CAUTION]
 > 本项目目前处于 Alpha 阶段，可能存在不稳定的情况。
 > 如发现任何问题，请通过 [Github Issues](https://github.com/Armangi1312/AMBehaviorSystem/issues) 提交 Bug 报告。

@@ -9,6 +9,12 @@
     <img src="https://img.shields.io/badge/Unity-6.0 LTS %2B-black?logo=unity"/>
 </p>
 
+<p align="center">
+    <i>Stop hardcoding behaviors.<br>
+    AM Behavior System lets you compose, swap, and visualize them at runtime.</i>
+</p>
+
+
 > [!CAUTION]
 > This project is currently in alpha and may not be stable.
 > Please report any bugs via [Github Issues](https://github.com/Armangi1312/AMBehaviorSystem/issues).
@@ -21,13 +27,13 @@
 
 ---
 
-
 ## 1. Introduction
 
 AM Behavior System is a behavior system framework for the Unity Engine.
 - Provides high reusability and flexibility through **Setting**, **Context**, **Processor**, and **Pipeline**.
 - Supports **visual editing** directly in the Unity Editor.
 - Designed to **minimize GC allocations** at runtime.
+
 
 ### Role of Each Element
 

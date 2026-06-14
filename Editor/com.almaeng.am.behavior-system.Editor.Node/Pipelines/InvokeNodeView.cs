@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using AMBehaviorSystem.Core;
 using AMBehaviorSystem.Node;
 using AMBehaviorSystem.Node.Pipelines;
 using GraphProcessor;
@@ -49,18 +48,18 @@ namespace AMBehaviorSystem.Editor.Node.Pipeline
             if (controller == null)
                 return;
 
-            var so = new SerializedObject(controller);
-            var processorsProp = so.FindProperty("<Processors>k__BackingField");
-            var itemsProp = processorsProp?.FindPropertyRelative("Items");
-            if (itemsProp == null)
+            var serializedObject = new SerializedObject(controller);
+            var processorsProperty = serializedObject.FindProperty("<Processors>k__BackingField");
+            var itemsProperty = processorsProperty?.FindPropertyRelative("Items");
+            if (itemsProperty == null)
                 return;
 
             var menu = new GenericMenu();
             var existing = new HashSet<string>(Node.ProcessorTypes);
 
-            for (int i = 0; i < itemsProp.arraySize; i++)
+            for (int i = 0; i < itemsProperty.arraySize; i++)
             {
-                var element = itemsProp.GetArrayElementAtIndex(i);
+                var element = itemsProperty.GetArrayElementAtIndex(i);
                 string fullTypeName = element.managedReferenceFullTypename;
 
                 if (string.IsNullOrEmpty(fullTypeName))
@@ -80,7 +79,7 @@ namespace AMBehaviorSystem.Editor.Node.Pipeline
                 });
             }
 
-            if (itemsProp.arraySize == 0)
+            if (itemsProperty.arraySize == 0)
                 menu.AddDisabledItem(new GUIContent("No processors available"));
 
             menu.ShowAsContext();

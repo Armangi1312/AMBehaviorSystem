@@ -9,6 +9,11 @@
     <img src="https://img.shields.io/badge/Unity-2022.3%2B-black?logo=unity"/>
 </p>
 
+<p align="center">
+    <i>Stop hardcoding behaviors.<br>
+    AM Behavior System lets you compose, swap, and visualize them at runtime.</i>
+</p>
+
 > [!CAUTION]
 > This project is currently in alpha and may not be stable.
 > Please report any bugs via [Github Issues](https://github.com/Armangi1312/AMBehaviorSystem/issues).

@@ -19,6 +19,7 @@ MonoBehaviour:
   - rid: 4477694332515909710
   - rid: 4477694332515909711
   - rid: 4477694332515909712
+  - rid: 4477694352153378924
   edges:
   - GUID: 7c59340e-8e25-4e29-ae94-d1101be6aa0e
     owner: {fileID: 11400000}
@@ -59,8 +60,8 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: -2639, y: 1755, z: 0}
-  scale: {x: 1.7490063, y: 1.7490063, z: 1}
+  position: {x: -2366, y: 1516, z: 0}
+  scale: {x: 1.520875, y: 1.520875, z: 1}
   controllerReference:
     targetID: GlobalObjectId_V1-2-b91fdef2f33e43f4f92a269c3d53c359-1916947743-0
     target: {fileID: 0}
@@ -144,6 +145,21 @@ MonoBehaviour:
           y: -936.82
           width: 122
           height: 95
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+    - rid: 4477694352153378924
+      type: {class: ModuloNode, ns: AMBehaviorSystem.Node.Math.Advanced, asm: com.almaeng.am.behavior-system.Node}
+      data:
+        nodeCustomName: 
+        GUID: 6148ce0f-399d-46ef-a974-9d1b1021a783
+        computeOrder: 5
+        position:
+          serializedVersion: 2
+          x: 1807.5
+          y: -700
+          width: 100
+          height: 99
         expanded: 0
         debug: 0
         nodeLock: 0

@@ -28,13 +28,16 @@ namespace AMBehaviorSystem.Editor.Pipelines
                 Graph.TargetController = @event.newValue as Controller;
             });
 
-            node.onProcessed += () => objectField.SetValueWithoutNotify(Graph?.TargetController);
-
-            schedule.Execute(() =>
+            if(Graph != null)
             {
-                Graph?.Resolve();
-                objectField.SetValueWithoutNotify(Graph?.TargetController);
-            });
+                node.onProcessed += () => objectField.SetValueWithoutNotify(Graph.TargetController);
+
+                schedule.Execute(() =>
+                {
+                    Graph.Resolve();
+                    objectField.SetValueWithoutNotify(Graph.TargetController);
+                });
+            }
 
             controlsContainer.Add(objectField);
         }

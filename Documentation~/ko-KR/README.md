@@ -9,6 +9,11 @@
     <img src="https://img.shields.io/badge/Unity-2022.3%2B-black?logo=unity"/>
 </p>
 
+<p align="center">
+    <i>더 이상 하드코딩하지 마세요.<br>
+    AM Behavior System으로 동작을 조합하고, 교체하고, 시각적으로 확인하세요.</i>
+</p>
+
 > [!CAUTION]
 > 이 프로젝트는 현재 알파 단계로 안전하지 않을 수 있습니다.
 > [Github Issues](https://github.com/Armangi1312/AMBehaviorSystem/issues)에 버그를 보고해주시면 감사하겠습니다.
