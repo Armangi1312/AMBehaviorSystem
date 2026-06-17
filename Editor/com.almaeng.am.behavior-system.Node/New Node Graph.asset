@@ -19,7 +19,10 @@ MonoBehaviour:
   - rid: 4477694332515909710
   - rid: 4477694332515909711
   - rid: 4477694332515909712
-  - rid: 4477694352153378924
+  - rid: 4477694385424433214
+  - rid: 4477694385424433216
+  - rid: 4477694430739169345
+  - rid: 4477694430739169346
   edges:
   - GUID: 7c59340e-8e25-4e29-ae94-d1101be6aa0e
     owner: {fileID: 11400000}
@@ -53,6 +56,30 @@ MonoBehaviour:
     outputFieldName: Entry
     inputPortIdentifier: 
     outputPortIdentifier: 
+  - GUID: e38b78aa-43c4-49cd-84c2-abf109b6783e
+    owner: {fileID: 11400000}
+    inputNodeGUID: ed45dfd3-bb72-4d8a-8909-7a1f5551b062
+    outputNodeGUID: 1f885630-6386-4695-8bb7-7ee94c7dedc1
+    inputFieldName: X
+    outputFieldName: Out
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: fa815ca2-9b3a-46d2-b2df-925dd7e7bf4e
+    owner: {fileID: 11400000}
+    inputNodeGUID: 3e0b0769-81b5-4e15-8701-37cd1e836cea
+    outputNodeGUID: ed45dfd3-bb72-4d8a-8909-7a1f5551b062
+    inputFieldName: input
+    outputFieldName: Out
+    inputPortIdentifier: 0
+    outputPortIdentifier: 
+  - GUID: 227cc2e6-f59f-432f-96d8-8e244af45d87
+    owner: {fileID: 11400000}
+    inputNodeGUID: 788529f2-7d87-4138-a652-6be7a57cf477
+    outputNodeGUID: 3e0b0769-81b5-4e15-8701-37cd1e836cea
+    inputFieldName: Y
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 0
   groups: []
   stackNodes: []
   pinnedElements: []
@@ -60,7 +87,7 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: -2366, y: 1516, z: 0}
+  position: {x: -2243, y: 1263, z: 0}
   scale: {x: 1.520875, y: 1.520875, z: 1}
   controllerReference:
     targetID: GlobalObjectId_V1-2-b91fdef2f33e43f4f92a269c3d53c359-1916947743-0
@@ -76,9 +103,9 @@ MonoBehaviour:
         computeOrder: 0
         position:
           serializedVersion: 2
-          x: 1662.3418
-          y: -827.1209
-          width: 150
+          x: 1660.5
+          y: -828
+          width: 88
           height: 93
         expanded: 0
         debug: 0
@@ -148,18 +175,70 @@ MonoBehaviour:
         expanded: 0
         debug: 0
         nodeLock: 0
-    - rid: 4477694352153378924
-      type: {class: ModuloNode, ns: AMBehaviorSystem.Node.Math.Advanced, asm: com.almaeng.am.behavior-system.Node}
+    - rid: 4477694385424433214
+      type: {class: GetComponentDataNode, ns: AMBehaviorSystem.Node.Data, asm: com.almaeng.am.behavior-system.Node}
       data:
         nodeCustomName: 
-        GUID: 6148ce0f-399d-46ef-a974-9d1b1021a783
+        GUID: 1f885630-6386-4695-8bb7-7ee94c7dedc1
         computeOrder: 5
         position:
           serializedVersion: 2
-          x: 1807.5
-          y: -700
+          x: 1557.5
+          y: -660
+          width: 236
+          height: 95
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        Target:
+          targetID: GlobalObjectId_V1-2-b91fdef2f33e43f4f92a269c3d53c359-1916947740-0
+          target: {fileID: 0}
+        Path: 
+    - rid: 4477694385424433216
+      type: {class: Atan2Node, ns: AMBehaviorSystem.Node.Math.Advanced, asm: com.almaeng.am.behavior-system.Node}
+      data:
+        nodeCustomName: 
+        GUID: ed45dfd3-bb72-4d8a-8909-7a1f5551b062
+        computeOrder: 6
+        position:
+          serializedVersion: 2
+          x: 1800.82
+          y: -593
           width: 100
           height: 99
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+    - rid: 4477694430739169345
+      type: {class: RelayNode, ns: , asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        nodeCustomName: 
+        GUID: 3e0b0769-81b5-4e15-8701-37cd1e836cea
+        computeOrder: 7
+        position:
+          serializedVersion: 2
+          x: 1963.3829
+          y: -604.0118
+          width: 200
+          height: 200
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        unpackOutput: 0
+        packInput: 0
+        inputEdgeCount: 0
+    - rid: 4477694430739169346
+      type: {class: Atan2Node, ns: AMBehaviorSystem.Node.Math.Advanced, asm: com.almaeng.am.behavior-system.Node}
+      data:
+        nodeCustomName: 
+        GUID: 788529f2-7d87-4138-a652-6be7a57cf477
+        computeOrder: 8
+        position:
+          serializedVersion: 2
+          x: 2093.5317
+          y: -526.6705
+          width: 100
+          height: 100
         expanded: 0
         debug: 0
         nodeLock: 0
