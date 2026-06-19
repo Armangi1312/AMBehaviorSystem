@@ -1,4 +1,4 @@
-﻿namespace AMBehaviorSystem.Node.Ports
+namespace AMBehaviorSystem.Node.Ports
 {
     public enum NumberType
     {

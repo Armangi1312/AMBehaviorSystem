@@ -26,3 +26,7 @@
 .Port_PipelineFlowPort {
 	--port-color: #FF8B8B;
 }
+
+.Port_Object {
+	--port-color: #84B2CE;
+}
