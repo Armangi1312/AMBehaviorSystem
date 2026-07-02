@@ -10,7 +10,7 @@ namespace AMBehaviorSystem.Node.Math.Advanced
     {
         public override string name => "Abs";
 
-        [Input] public NumberPort A;
+        [Input] public NumberPort In;
     }
 
     [Serializable]
@@ -141,5 +141,56 @@ namespace AMBehaviorSystem.Node.Math.Advanced
         [Input] public NumberPort Max;
 
         public NumberType OutputType;
+    }
+
+    public enum ComparisonType
+    {
+        Equal,
+        NotEqual,
+        Less,
+        LessOrEqual,
+        Greater,
+        GreaterOrEqual,
+    }
+
+    public enum LogicType
+    {
+        And,
+        Or,
+        Xor
+    }
+
+    [Serializable]
+    [NodeMenuItem("Math/Advanced/Comparison")]
+    public class ComparisonNode : BaseMathNode<BooleanPort>
+    {
+        public override string name => "Comparison";
+
+        [Input] public NumberPort A;
+        [Input] public NumberPort B;
+
+        public ComparisonType ComparisonType;
+    }
+
+    [Serializable]
+    [NodeMenuItem("Math/Advanced/Logic")]
+    public class LogicNode : BaseMathNode<BooleanPort>
+    {
+        public override string name => "Logic";
+
+        [Input] public BooleanPort A;
+        [Input] public BooleanPort B;
+
+        public LogicType LogicType;
+    }
+
+
+    [Serializable]
+    [NodeMenuItem("Math/Advanced/Not")]
+    public class NotNode : BaseMathNode<BooleanPort>
+    {
+        public override string name => "Not";
+
+        [Input] public BooleanPort In;
     }
 }

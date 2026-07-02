@@ -1,0 +1,17 @@
+{
+    "name": "AMBehaviorSystem.Compiler",
+    "rootNamespace": "",
+    "references": [
+        "GUID:4a1c4592808d9454e8aa9daf42b8374b",
+        "GUID:3275b29aab67b134eb7e009153685e80"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

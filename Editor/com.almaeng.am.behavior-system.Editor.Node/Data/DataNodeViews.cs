@@ -187,14 +187,14 @@ namespace AMBehaviorSystem.Editor.Node.Data
             ObjectField objectField = new()
             {
                 label = "Target",
-                objectType = typeof(Object),
+                objectType = typeof(GameObject),
                 allowSceneObjects = true
             };
 
             objectField.RegisterValueChangedCallback(@event =>
             {
                 owner.RegisterCompleteObjectUndo("Updated Node Target");
-                node.Target.Value = @event.newValue;
+                node.Target.Value = @event.newValue as GameObject;
                 UpdatePathLabel();
             });
 
@@ -225,12 +225,12 @@ namespace AMBehaviorSystem.Editor.Node.Data
 
             List<string> paths = new();
 
-            if (target is GameObject go)
+            if (target is GameObject gameObject)
             {
-                foreach (Component comp in go.GetComponents<Component>())
+                foreach (Component component in gameObject.GetComponents<Component>())
                 {
-                    if (comp == null) continue;
-                    Type compType = comp.GetType();
+                    if (component == null) continue;
+                    Type compType = component.GetType();
                     ReflectionPathUtility.CollectPaths(compType, compType.Name, paths, 0, blockUnityRefs: true);
                 }
             }

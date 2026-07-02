@@ -1,5 +1,6 @@
 ﻿using AMBehaviorSystem.Core.Pipelines;
 using AMBehaviorSystem.Core.Utilities;
+using NUnit.Framework.Internal.Commands;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -50,9 +51,7 @@ namespace AMBehaviorSystem.Core
         /// </summary>
         [field: SerializeReference] public ObservableList<TProcessor> Processors { get; protected set; } = new();
 
-        // TODO: Pipeline 시스템 연동 시 활성화
-        // [SerializeReference] protected PipelineGraph Graph;
-        public Pipeline Pipeline { get; private set; }
+        [field: SerializeReference] public BasePipeline<TProcessor, TSetting, TContext> Pipeline { get; protected set; } = null;
 
         //==== 내부 프로퍼티 ====//
 
@@ -67,8 +66,9 @@ namespace AMBehaviorSystem.Core
 
             ValidateDependencies();
             InitializeProcessors();
-            InitializePipeline();
+
             SubscribeEvents();
+            InitializePipeline();
         }
 
         protected virtual void InitializeProcessors()
@@ -95,8 +95,7 @@ namespace AMBehaviorSystem.Core
 
         protected virtual void InitializePipeline()
         {
-            // TODO: Pipeline 시스템 연동 시 활성화
-            // Pipeline = PipelineFactory.CreatePipeline(Graph);
+            Pipeline?.Initialize(Processors, Settings, Contexts);
         }
 
         #endregion
@@ -239,6 +238,12 @@ namespace AMBehaviorSystem.Core
 
         protected virtual void InvokeProcessors(InvokeTiming timing)
         {
+            if(Pipeline != null)
+            {
+                Pipeline.Invoke(timing);
+                return;
+            }
+
             for (int i = 0; i < Processors.Count; i++)
             {
                 TProcessor processor = Processors[i];
@@ -248,13 +253,13 @@ namespace AMBehaviorSystem.Core
             }
         }
 
-        private void Awake() { Initialize(); InvokeProcessors(InvokeTiming.Awake); }
-        private void Start() => InvokeProcessors(InvokeTiming.Start);
-        private void Update() => InvokeProcessors(InvokeTiming.Update);
-        private void FixedUpdate() => InvokeProcessors(InvokeTiming.FixedUpdate);
-        private void LateUpdate() => InvokeProcessors(InvokeTiming.LateUpdate);
-        private void OnEnable() => InvokeProcessors(InvokeTiming.OnEnable);
-        private void OnDisable() => InvokeProcessors(InvokeTiming.OnDisable);
+        protected virtual void Awake() { Initialize(); InvokeProcessors(InvokeTiming.Awake); }
+        protected virtual void Start() => InvokeProcessors(InvokeTiming.Start);
+        protected virtual void Update() => InvokeProcessors(InvokeTiming.Update);
+        protected virtual void FixedUpdate() => InvokeProcessors(InvokeTiming.FixedUpdate);
+        protected virtual void LateUpdate() => InvokeProcessors(InvokeTiming.LateUpdate);
+        protected virtual void OnEnable() => InvokeProcessors(InvokeTiming.OnEnable);
+        protected virtual void OnDisable() => InvokeProcessors(InvokeTiming.OnDisable);
 
         private void OnDestroy()
         {

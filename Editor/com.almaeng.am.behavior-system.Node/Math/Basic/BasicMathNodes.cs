@@ -11,11 +11,11 @@ namespace AMBehaviorSystem.Node.Math.Basic
     {
         public override string name => "Add";
 
-        [Input] public Port A;
-        [Input] public Port B;
+        [Input] public NumberPort A;
+        [Input] public NumberPort B;
 
         [CustomPortBehavior(nameof(A))]
-        public IEnumerable<PortData> APort(List<SerializableEdge> _) => CreatePort("A", false);
+        public IEnumerable<PortData> APort(List<SerializableEdge> _) => CreatePort("In", false);
 
         [CustomPortBehavior(nameof(B))]
         public IEnumerable<PortData> BPort(List<SerializableEdge> _) => CreatePort("B", false);
@@ -27,11 +27,11 @@ namespace AMBehaviorSystem.Node.Math.Basic
     {
         public override string name => "Subtract";
 
-        [Input] public Port A;
-        [Input] public Port B;
+        [Input] public NumberPort A;
+        [Input] public NumberPort B;
 
         [CustomPortBehavior(nameof(A))]
-        public IEnumerable<PortData> APort(List<SerializableEdge> _) => CreatePort("A", false);
+        public IEnumerable<PortData> APort(List<SerializableEdge> _) => CreatePort("In", false);
 
         [CustomPortBehavior(nameof(B))]
         public IEnumerable<PortData> BPort(List<SerializableEdge> _) => CreatePort("B", false);
@@ -43,11 +43,11 @@ namespace AMBehaviorSystem.Node.Math.Basic
     {
         public override string name => "Multiply";
 
-        [Input] public Port A;
+        [Input] public NumberPort A;
         [Input] public NumberPort B;
 
         [CustomPortBehavior(nameof(A))]
-        public IEnumerable<PortData> APort(List<SerializableEdge> _) => CreatePort("A", false);
+        public IEnumerable<PortData> APort(List<SerializableEdge> _) => CreatePort("In", false);
     }
 
     [Serializable]
@@ -56,11 +56,11 @@ namespace AMBehaviorSystem.Node.Math.Basic
     {
         public override string name => "Divide";
 
-        [Input] public Port A;
+        [Input] public NumberPort A;
         [Input] public NumberPort B;
 
         [CustomPortBehavior(nameof(A))]
-        public IEnumerable<PortData> APort(List<SerializableEdge> _) => CreatePort("A", false);
+        public IEnumerable<PortData> APort(List<SerializableEdge> _) => CreatePort("In", false);
     }
 
     [Serializable]
@@ -69,11 +69,11 @@ namespace AMBehaviorSystem.Node.Math.Basic
     {
         public override string name => "Power";
 
-        [Input] public Port A;
+        [Input] public NumberPort A;
         [Input] public NumberPort B;
 
         [CustomPortBehavior(nameof(A))]
-        public IEnumerable<PortData> APort(List<SerializableEdge> _) => CreatePort("A", false);
+        public IEnumerable<PortData> APort(List<SerializableEdge> _) => CreatePort("In", false);
     }
 
     [Serializable]
@@ -82,6 +82,6 @@ namespace AMBehaviorSystem.Node.Math.Basic
     {
         public override string name => "Square Root";
 
-        [Input] public NumberPort A;
+        [Input] public NumberPort In;
     }
 }

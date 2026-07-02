@@ -1,3 +1,4 @@
+using AMBehaviorSystem.Node.Math;
 using AMBehaviorSystem.Node.Ports;
 using GraphProcessor;
 using System;
@@ -6,18 +7,12 @@ using UnityEngine;
 namespace AMBehaviorSystem.Node.Primitives
 {
     [Serializable]
-    public abstract class BasePrimitiveNode<TField> : BaseNode
+    public abstract class BasePrimitiveNode<TField, TOutput> : BaseNode, IPrimitiveNode, IOutNode<TOutput>, IFieldNode<TField>
         where TField : struct
+        where TOutput : Port
     {
-        public TField Field;
-    }
-
-    [Serializable]
-    public abstract class BasePrimitiveNode<TField, TOutPort> : BasePrimitiveNode<TField>
-        where TField : struct
-        where TOutPort : Port
-    {
-        [Output] public TOutPort Out;
+        [field: Output, SerializeField] public TOutput Out { get; set; }
+        [field: SerializeField] public TField Field { get; set; }
     }
 
     [Serializable]

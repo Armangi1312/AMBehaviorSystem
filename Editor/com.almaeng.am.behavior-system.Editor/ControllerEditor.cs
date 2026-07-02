@@ -17,6 +17,7 @@ namespace AMBehaviorSystem.Editor
         private SerializedProperty settingsProperty;
         private SerializedProperty contextsProperty;
         private SerializedProperty processorsProperty;
+        private SerializedProperty pipelineProperty;
 
         private void OnEnable()
         {
@@ -24,9 +25,10 @@ namespace AMBehaviorSystem.Editor
 
             settingsProperty = serializedObject.FindProperty("<Settings>k__BackingField");
             contextsProperty = serializedObject.FindProperty("<Contexts>k__BackingField");
-            processorsProperty = serializedObject
-                .FindProperty("<Processors>k__BackingField")
-                .FindPropertyRelative("Items");
+            processorsProperty = serializedObject.FindProperty("<Processors>k__BackingField")
+                                                 .FindPropertyRelative("Items");
+
+            pipelineProperty = serializedObject.FindProperty("<Pipeline>k__BackingField");
         }
 
         public override VisualElement CreateInspectorGUI()

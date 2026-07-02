@@ -15,7 +15,7 @@ namespace AMBehaviorSystem.Node.Math.Advanced
         [Input] public Port B;
 
         [CustomPortBehavior(nameof(A))]
-        public IEnumerable<PortData> APort(List<SerializableEdge> _) => CreatePort("A", false);
+        public IEnumerable<PortData> APort(List<SerializableEdge> _) => CreatePort("In", false);
 
         [CustomPortBehavior(nameof(B))]
         public IEnumerable<PortData> BPort(List<SerializableEdge> _) => CreatePort("B", false);
@@ -31,7 +31,7 @@ namespace AMBehaviorSystem.Node.Math.Advanced
         [Input] public Port B;
 
         [CustomPortBehavior(nameof(A))]
-        public IEnumerable<PortData> APort(List<SerializableEdge> _) => CreatePort("A", false);
+        public IEnumerable<PortData> APort(List<SerializableEdge> _) => CreatePort("In", false);
 
         [CustomPortBehavior(nameof(B))]
         public IEnumerable<PortData> BPort(List<SerializableEdge> _) => CreatePort("B", false);
@@ -72,7 +72,7 @@ namespace AMBehaviorSystem.Node.Math.Advanced
         [Input] public NumberPort T;
 
         [CustomPortBehavior(nameof(A))]
-        public IEnumerable<PortData> APort(List<SerializableEdge> _) => CreatePort("A", false);
+        public IEnumerable<PortData> APort(List<SerializableEdge> _) => CreatePort("In", false);
 
         [CustomPortBehavior(nameof(B))]
         public IEnumerable<PortData> BPort(List<SerializableEdge> _) => CreatePort("B", false);

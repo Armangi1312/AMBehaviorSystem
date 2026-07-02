@@ -18,13 +18,13 @@ namespace AMBehaviorSystem.Node.Data
     }
 
     [Serializable]
-    [NodeMenuItem("Data/GetComponentData")]
+    [NodeMenuItem("Data/Get Component Data")]
     public class GetComponentDataNode : BaseDataNode<object>
     {
         public override string name => "Get Component Data";
 
         [SerializeField]
-        public SceneObjectReference<UnityEngine.Object> Target;
+        public SceneObjectReference<GameObject> Target;
         public string Path;
     }
 
