@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: New Node Graph
   m_EditorClassIdentifier: com.almaeng.am.behavior-system.Node::AMBehaviorSystem.Node.NodeGraph
   serializedNodes: []
-  nodes: []
+  nodes:
+  - rid: 3849352905034825803
   edges: []
   groups: []
   stackNodes: []
@@ -22,11 +23,26 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: 0, y: 0, z: 0}
-  scale: {x: 1, y: 1, z: 1}
+  position: {x: 586, y: 333, z: 0}
+  scale: {x: 2, y: 2, z: 1}
   controllerReference:
     targetID: 
     target: {fileID: 0}
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 3849352905034825803
+      type: {class: EntryNode, ns: AMBehaviorSystem.Node.Pipelines, asm: com.almaeng.am.behavior-system.Node}
+      data:
+        nodeCustomName: 
+        GUID: 5bb3e3e8-297a-46a3-9662-35d739d627b4
+        computeOrder: 0
+        position:
+          serializedVersion: 2
+          x: 0
+          y: 0
+          width: 100
+          height: 100
+        expanded: 0
+        debug: 0
+        nodeLock: 0

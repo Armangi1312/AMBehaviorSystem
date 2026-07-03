@@ -1,71 +1,35 @@
-using AMBehaviorSystem.Core;
 using AMBehaviorSystem.Node;
 using AMBehaviorSystem.Node.Pipelines;
 using GraphProcessor;
 using System.Collections.Generic;
 using UnityEditor;
-using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace AMBehaviorSystem.Editor.Node.Pipelines
 {
-    [NodeCustomEditor(typeof(EntryNode))]
-    public class EntryNodeView : BaseNodeView
-    {
-        private NodeGraph Graph => owner.graph as NodeGraph;
-
-        public override void Enable()
-        {
-            EntryNode node = nodeTarget as EntryNode;
-
-            ObjectField objectField = new()
-            {
-                objectType = typeof(Controller),
-                allowSceneObjects = true
-            };
-
-            objectField.RegisterValueChangedCallback(@event =>
-            {
-                owner.RegisterCompleteObjectUndo("Updated EntryNode");
-                Graph.TargetController = @event.newValue as Controller;
-            });
-
-            if (Graph != null)
-            {
-                node.onProcessed += () => objectField.SetValueWithoutNotify(Graph.TargetController);
-
-                schedule.Execute(() =>
-                {
-                    Graph.Resolve();
-                    objectField.SetValueWithoutNotify(Graph.TargetController);
-                });
-            }
-
-            controlsContainer.Add(objectField);
-        }
-    }
-
     [NodeCustomEditor(typeof(InvokeNode))]
     public class InvokeNodeView : BaseNodeView
     {
         private NodeGraph Graph => owner.graph as NodeGraph;
-        private InvokeNode Node => nodeTarget as InvokeNode;
+        private InvokeNode TargetNode => nodeTarget as InvokeNode;
 
         public override void Enable()
         {
-            var listView = new ListView
+            InvokeNode node = TargetNode;
+
+            ListView listView = new()
             {
                 reorderable = false,
                 showAddRemoveFooter = true,
                 showBorder = true,
                 showFoldoutHeader = false,
-                itemsSource = Node.ProcessorTypes,
+                itemsSource = node.ProcessorTypes,
                 makeItem = () => new Label(),
-                bindItem = (element, i) =>
+                bindItem = (element, index) =>
                 {
                     Label label = element as Label;
-                    label.text = FormatTypeName(Node.ProcessorTypes[i]);
+                    label.text = FormatTypeName(node.ProcessorTypes[index]);
                 }
             };
 
@@ -75,32 +39,34 @@ namespace AMBehaviorSystem.Editor.Node.Pipelines
                 listView.Rebuild();
             };
 
-            listView.onAdd = _ => ShowAddMenu(listView);
+            listView.onAdd = _ => ShowAddMenu(listView, node);
 
             controlsContainer.Add(listView);
         }
 
-        private void ShowAddMenu(ListView listView)
+        private void ShowAddMenu(ListView listView, InvokeNode node)
         {
-            var controller = Graph?.TargetController;
+            Object controller = Graph?.TargetController;
+
             if (controller == null) return;
 
-            var serializedObject = new SerializedObject(controller);
-            var processorsProperty = serializedObject.FindProperty("<Processors>k__BackingField");
-            var itemsProperty = processorsProperty?.FindPropertyRelative("Items");
+            SerializedObject serializedObject = new(controller);
+            SerializedProperty processorsProperty = serializedObject.FindProperty("<Processors>k__BackingField");
+            SerializedProperty itemsProperty = processorsProperty?.FindPropertyRelative("Items");
+
             if (itemsProperty == null) return;
 
-            var menu = new GenericMenu();
-            var existing = new HashSet<string>(Node.ProcessorTypes);
+            GenericMenu menu = new();
+            HashSet<string> existingTypes = new(node.ProcessorTypes);
 
             for (int i = 0; i < itemsProperty.arraySize; i++)
             {
-                var element = itemsProperty.GetArrayElementAtIndex(i);
+                SerializedProperty element = itemsProperty.GetArrayElementAtIndex(i);
                 string fullTypeName = element.managedReferenceFullTypename;
 
                 if (string.IsNullOrEmpty(fullTypeName)) continue;
 
-                if (existing.Contains(fullTypeName))
+                if (existingTypes.Contains(fullTypeName))
                 {
                     menu.AddDisabledItem(new GUIContent(FormatTypeName(fullTypeName)));
                     continue;
@@ -109,7 +75,7 @@ namespace AMBehaviorSystem.Editor.Node.Pipelines
                 menu.AddItem(new GUIContent(FormatTypeName(fullTypeName)), false, () =>
                 {
                     owner.RegisterCompleteObjectUndo("Add Processor");
-                    Node.ProcessorTypes.Add(fullTypeName);
+                    node.ProcessorTypes.Add(fullTypeName);
                     listView.Rebuild();
                 });
             }

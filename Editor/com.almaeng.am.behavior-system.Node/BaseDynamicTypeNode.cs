@@ -2,7 +2,7 @@ using GraphProcessor;
 using System;
 using System.Collections.Generic;
 
-namespace AMBehaviorSystem.Node.Base
+namespace AMBehaviorSystem.Node
 {
     [Serializable]
     public abstract class BaseDynamicTypeNode : BaseNode

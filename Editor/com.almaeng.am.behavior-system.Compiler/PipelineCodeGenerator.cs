@@ -245,7 +245,7 @@
 
 //            foreach (BaseNode node in graph.nodes)
 //            {
-//                if (node is not GetContextDataNode contextNode) continue;
+//                if (node is not ContextDataNode contextNode) continue;
 
 //                string typeName = FormatTypeName(contextNode.Type);
 //                if (seen.Add(typeName))
@@ -262,7 +262,7 @@
 
 //            foreach (BaseNode node in graph.nodes)
 //            {
-//                if (node is not GetSettingDataNode settingNode) continue;
+//                if (node is not SettingDataNode settingNode) continue;
 
 //                string typeName = FormatTypeName(settingNode.Type);
 //                if (seen.Add(typeName))
@@ -278,7 +278,7 @@
 
 //            foreach (BaseNode node in graph.nodes)
 //            {
-//                if (node is not GetComponentDataNode componentNode) continue;
+//                if (node is not ComponentDataNode componentNode) continue;
 
 //                string guid = componentNode.GUID[..8].Replace("-", "");
 //                string[] segments = componentNode.Path.Split('.');

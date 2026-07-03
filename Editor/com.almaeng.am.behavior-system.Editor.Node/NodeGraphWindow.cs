@@ -6,11 +6,6 @@ using UnityEngine;
 
 namespace AMBehaviorSystem.Editor.Node
 {
-    public class NodeGraphView : BaseGraphView
-    {
-        public NodeGraphView(EditorWindow window) : base(window) { }
-    }
-
     public class NodeGraphWindow : BaseGraphWindow
     {
         [OnOpenAsset(0)]

@@ -2,7 +2,7 @@ using AMBehaviorSystem.Node.Ports;
 using GraphProcessor;
 using System;
 
-namespace AMBehaviorSystem.Node.Base
+namespace AMBehaviorSystem.Node
 {
     [Serializable]
     public abstract class BaseValueNode<TField, TOutput> : BaseNode

@@ -1,4 +1,5 @@
-﻿using GraphProcessor;
+﻿using AMBehaviorSystem.Node.Pipelines;
+using GraphProcessor;
 using UnityEngine;
 
 namespace AMBehaviorSystem.Node
@@ -14,8 +15,6 @@ namespace AMBehaviorSystem.Node
             set => controllerReference.Value = value;
         }
 
-#if UNITY_EDITOR
         public void Resolve() => controllerReference.Resolve();
-#endif
     }
 }

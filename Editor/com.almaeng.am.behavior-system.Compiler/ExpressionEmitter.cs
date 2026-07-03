@@ -191,27 +191,27 @@
 //                return (varName, portType);
 //            },
 
-//            [typeof(GetContextDataNode)] = static (_, _, n) =>
+//            [typeof(ContextDataNode)] = static (_, _, n) =>
 //            {
-//                GetContextDataNode node = (GetContextDataNode)n;
+//                ContextDataNode node = (ContextDataNode)n;
 //                string typeName = FormatTypeName(node.Type);
 //                string fieldName = ToFieldName(typeName);
 //                Type rootType = ResolveTypeFromName(typeName);
 //                Type portType = ResolvePathType(rootType, node.Path);
 //                return ($"{fieldName}.{node.Path}", portType);
 //            },
-//            [typeof(GetSettingDataNode)] = static (_, _, n) =>
+//            [typeof(SettingDataNode)] = static (_, _, n) =>
 //            {
-//                GetSettingDataNode node = (GetSettingDataNode)n;
+//                SettingDataNode node = (SettingDataNode)n;
 //                string typeName = FormatTypeName(node.Type);
 //                string fieldName = ToFieldName(typeName);
 //                Type rootType = ResolveTypeFromName(typeName);
 //                Type portType = ResolvePathType(rootType, node.Path);
 //                return ($"{fieldName}.{node.Path}", portType);
 //            },
-//            [typeof(GetComponentDataNode)] = static (_, _, n) =>
+//            [typeof(ComponentDataNode)] = static (_, _, n) =>
 //            {
-//                GetComponentDataNode node = (GetComponentDataNode)n;
+//                ComponentDataNode node = (ComponentDataNode)n;
 //                string guid = node.GUID[..8].Replace("-", "");
 //                string[] segments = node.Path.Split('.');
 //                string componentTypeName = segments.Length >= 2 ? segments[0] : "Transform";
