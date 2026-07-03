@@ -12,10 +12,7 @@ namespace AMBehaviorSystem.Node.Ports
     public class NumberPort : Port { }
 
     [Serializable]
-    public abstract class VectorPort : NumberPort { }
-
-    [Serializable]
-    public class Vector2Port : VectorPort { }
+    public class Vector2Port : NumberPort { }
 
     [Serializable]
     public class Vector3Port : Vector2Port { }
