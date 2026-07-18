@@ -1,3 +1,4 @@
+using AMBehaviorSystem.Node.Ports;
 using GraphProcessor;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ namespace AMBehaviorSystem.Node
             };
         }
 
-       [CustomPortTypeBehavior(typeof(Ports.Port))]
+       [CustomPortTypeBehavior(typeof(Port))]
        private IEnumerable<PortData> DynamicPortBehavior(string fieldName, string displayName, object value)
        {
            yield return new PortData

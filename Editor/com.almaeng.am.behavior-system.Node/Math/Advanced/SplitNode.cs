@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using UnityEngine;
 
 namespace AMBehaviorSystem.Node.Math.Advanced
 {
@@ -48,13 +49,13 @@ namespace AMBehaviorSystem.Node.Math.Advanced
             int count = GetComponentCount();
 
             if (count >= ComponentCountX)
-                yield return new PortData { identifier = nameof(X), displayName = nameof(X), displayType = typeof(NumberPort) };
+                yield return new PortData { identifier = nameof(X), displayName = nameof(X), displayType = typeof(NumberPort), acceptMultipleEdges = true };
             if (count >= ComponentCountY)
-                yield return new PortData { identifier = nameof(Y), displayName = nameof(Y), displayType = typeof(NumberPort) };
+                yield return new PortData { identifier = nameof(Y), displayName = nameof(Y), displayType = typeof(NumberPort), acceptMultipleEdges = true };
             if (count >= ComponentCountZ)
-                yield return new PortData { identifier = nameof(Z), displayName = nameof(Z), displayType = typeof(NumberPort) };
+                yield return new PortData { identifier = nameof(Z), displayName = nameof(Z), displayType = typeof(NumberPort), acceptMultipleEdges = true };
             if (count >= ComponentCountW)
-                yield return new PortData { identifier = nameof(W), displayName = nameof(W), displayType = typeof(NumberPort) };
+                yield return new PortData { identifier = nameof(W), displayName = nameof(W), displayType = typeof(NumberPort), acceptMultipleEdges = true };
         }
 
         [CustomPortBehavior(nameof(Y))]

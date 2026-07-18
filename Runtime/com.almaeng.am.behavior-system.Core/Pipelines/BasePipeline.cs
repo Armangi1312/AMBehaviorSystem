@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace AMBehaviorSystem.Core.Pipelines
 {
@@ -9,7 +10,7 @@ namespace AMBehaviorSystem.Core.Pipelines
         where TSetting : ISetting
         where TContext : IContext
     {
-        public abstract void Initialize(IReadOnlyList<TProcessor> processors, IReadOnlyRegistry<TSetting> settings, IReadOnlyRegistry<TContext> contexts);
+        public abstract void Initialize(IReadOnlyList<TProcessor> processors, IReadOnlyRegistry<TSetting> settings, IReadOnlyRegistry<TContext> contexts, Component owner);
 
         public abstract void Invoke(InvokeTiming timing);
 

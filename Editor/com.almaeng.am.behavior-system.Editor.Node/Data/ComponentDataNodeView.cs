@@ -3,6 +3,7 @@ using AMBehaviorSystem.Node.Data;
 using GraphProcessor;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -28,14 +29,14 @@ namespace AMBehaviorSystem.Editor.Node.Data
             Object target = Graph.TargetController;
             List<string> paths = new();
 
-            if (target is GameObject gameObject)
+            if (target is Component gameObject)
             {
-                foreach (Component component in gameObject.GetComponents<Component>())
+                foreach (Component component in gameObject.GetComponentsInChildren<Component>())
                 {
                     if (component == null) continue;
 
                     Type componentType = component.GetType();
-                    ReflectionPathUtility.CollectPaths(componentType, componentType.Name, paths, 0, blockUnityRefs: true);
+                    ReflectionPathUtility.CollectPaths(componentType, componentType.Name, paths, 0, blockUnityRefs: false);
                 }
             }
             else
@@ -44,6 +45,35 @@ namespace AMBehaviorSystem.Editor.Node.Data
             }
 
             return paths;
+        }
+
+        protected override void OnSelected(string path)
+        {
+            const char Separator = '.';
+
+            if (string.IsNullOrEmpty(path))
+            {
+                throw new ArgumentException("Path cannot be null or empty.", nameof(path));
+            }
+
+            int separatorIndex = path.IndexOf(Separator);
+            if (separatorIndex < 0)
+            {
+                throw new FormatException($"Path '{path}' does not contain a member (expected format: 'Type.member').");
+            }
+
+            string componentTypeName = path.Substring(0, separatorIndex);
+            string memberPath = path.Substring(separatorIndex + 1);
+
+            if (memberPath.Length == 0)
+            {
+                throw new FormatException($"Path '{path}' has no member after separator.");
+            }
+
+            Node.Type = componentTypeName;
+            Node.Path = memberPath;
+
+            Debug.Log($"{Node.Type}.{Node.Path}");
         }
     }
 }

@@ -10,22 +10,22 @@ namespace AMBehaviorSystem.Core
     public abstract class Controller : MonoBehaviour 
     {
         /// <summary>
-        /// 프로세서가 요구하는 설정과 컨텍스트가 모두 등록되어 있는지 검증하고, 누락된 경우 자동으로 인스턴스를 생성하여 등록합니다.
+        /// Verifies whether all settings and contexts required by the processor are registered, and automatically creates and registers instances if any are missing.
         /// </summary>
         public abstract void ValidateDependencies();
 
         /// <summary>
-        /// 프로세서가 요구하는 설정이 등록 해제되는 경우, 해당 타입이 여전히 필요한지 검증합니다. 필요한 경우 경고 메시지를 출력하고, 그렇지 않은 경우 제거를 허용합니다.
+        /// Verifies whether the type is still required when a setting requested by the processor is being unregistered. Outputs a warning message if it is required; otherwise, allows the removal.
         /// </summary>
-        /// <param name="type">확인할 타입</param>
-        /// <returns>필요한 지</returns>
+        /// <param name="type">The type to check</param>
+        /// <returns>Whether it is required</returns>
         public abstract bool IsSettingRequired(Type type);
 
         /// <summary>
-        /// 프로세서가 요구하는 컨텍스트가 등록 해제되는 경우, 해당 타입이 여전히 필요한지 검증합니다. 필요한 경우 경고 메시지를 출력하고, 그렇지 않은 경우 제거를 허용합니다.
+        /// Verifies whether the type is still required when the context requested by the processor is being unregistered. Outputs a warning message if it is required; otherwise, allows removal.
         /// </summary>
-        /// <param name="type">확인할 타입</param>
-        /// <returns>필요한 지</returns>
+        /// <param name="type">The type to check</param>
+        /// <returns>Whether it is required</returns>
         public abstract bool IsContextRequired(Type type);
     }
 
@@ -37,17 +37,17 @@ namespace AMBehaviorSystem.Core
         //==== 공유 프로퍼티 ====//
 
         /// <summary>
-        /// 런타임 준불변 데이터를 저장하는 객체입니다.
+        /// An object that stores runtime semi-immutable data.
         /// </summary>
         [field: SerializeReference] public ObservableRegistry<TSetting> Settings { get; protected set; } = new();
 
         /// <summary>
-        /// 런타임 가변 데이터를 저장하는 객체입니다.
+        /// An object that stores runtime variable data.
         /// </summary>
         [field: SerializeReference] public ObservableRegistry<TContext> Contexts { get; protected set; } = new();
 
         /// <summary>
-        /// 게임 로직을 처리하는 모듈 단위의 프로세서를 저장하는 컬렉션입니다.
+        /// A collection that stores module-level processors responsible for handling game logic.
         /// </summary>
         [field: SerializeReference] public ObservableList<TProcessor> Processors { get; protected set; } = new();
 
@@ -95,7 +95,7 @@ namespace AMBehaviorSystem.Core
 
         protected virtual void InitializePipeline()
         {
-            Pipeline?.Initialize(Processors, Settings, Contexts);
+            Pipeline?.Initialize(Processors, Settings, Contexts, this);
         }
 
         #endregion
@@ -103,7 +103,7 @@ namespace AMBehaviorSystem.Core
         #region 의존성 검증
 
         /// <summary>
-        /// 프로세서가 요구하는 설정과 컨텍스트가 모두 등록되어 있는지 검증하고, 누락된 경우 자동으로 인스턴스를 생성하여 등록합니다.
+        /// Verifies whether all settings and contexts required by the processor are registered, and automatically creates and registers instances if any are missing.
         /// </summary>
         public override void ValidateDependencies()
         {
@@ -151,10 +151,10 @@ namespace AMBehaviorSystem.Core
         }
 
         /// <summary>
-        /// 프로세서가 요구하는 설정이 등록 해제되는 경우, 해당 타입이 여전히 필요한지 검증합니다. 필요한 경우 경고 메시지를 출력하고, 그렇지 않은 경우 제거를 허용합니다.
+        /// Verifies whether the type is still required when a setting requested by the processor is being unregistered. Outputs a warning message if it is required; otherwise, allows the removal.
         /// </summary>
-        /// <param name="type">확인할 타입</param>
-        /// <returns>필요한 지</returns>
+        /// <param name="type">The type to check</param>
+        /// <returns>Whether it is required</returns>
         public override bool IsSettingRequired(Type type)
         {
             CollectDependencies(out HashSet<Type> settingTypes, out _);
@@ -165,10 +165,10 @@ namespace AMBehaviorSystem.Core
         }
 
         /// <summary>
-        /// 프로세서가 요구하는 컨텍스트가 등록 해제되는 경우, 해당 타입이 여전히 필요한지 검증합니다. 필요한 경우 경고 메시지를 출력하고, 그렇지 않은 경우 제거를 허용합니다.
+        /// Verifies whether the type is still required when the context requested by the processor is being unregistered. Outputs a warning message if it is required; otherwise, allows removal.
         /// </summary>
-        /// <param name="type">확인할 타입</param>
-        /// <returns>필요한 지</returns>
+        /// <param name="type">The type to check</param>
+        /// <returns>Whether it is required</returns>
         public override bool IsContextRequired(Type type)
         {
             CollectDependencies(out _, out HashSet<Type> contextTypes);

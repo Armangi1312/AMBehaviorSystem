@@ -7,18 +7,15 @@ namespace AMBehaviorSystem.Node.Math.Basic
 {
     [Serializable]
     [NodeMenuItem("Math/Basic/Subtract")]
-    public class SubtractNode : BaseNode, IMathNode
+    public class SubtractNode : BaseDynamicTypeNode, IMathNode
     {
         public override string name => "Subtract";
+
+        protected override Type DefaultType => typeof(NumberPort);
 
         [Input] public Port A;
         [Input] public Port B;
 
         [Output] public Port Out;
-
-        protected override void Enable()
-        {
-            Debug.Log("Enable");
-        }
     }
 }

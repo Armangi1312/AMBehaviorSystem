@@ -1,7 +1,7 @@
-﻿// Editor/Node/Data/BaseDataNodeView.cs
-using AMBehaviorSystem.Node.Data;
+﻿using AMBehaviorSystem.Node.Data;
 using GraphProcessor;
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace AMBehaviorSystem.Editor.Node.Data
@@ -23,6 +23,7 @@ namespace AMBehaviorSystem.Editor.Node.Data
         }
 
         protected virtual void OnEnabled() { }
+        protected virtual void OnSelected(string path) { }
 
         protected abstract List<string> BuildPathOptions();
         protected abstract bool CanSelectPath();
@@ -49,6 +50,7 @@ namespace AMBehaviorSystem.Editor.Node.Data
             {
                 owner.RegisterCompleteObjectUndo("Updated Node Path");
                 Node.Path = path;
+                OnSelected(path);
                 UpdatePathLabel();
             });
         }

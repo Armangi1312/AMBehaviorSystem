@@ -14,6 +14,6 @@ namespace AMBehaviorSystem.Node.Math.Basic
         [Input] public NumberPort A;
         [Input] public NumberPort B;
 
-        [Output] public Port Out;
+        [Output] public NumberPort Out;
     }
 }

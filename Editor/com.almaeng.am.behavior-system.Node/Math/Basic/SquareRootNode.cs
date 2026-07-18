@@ -13,6 +13,6 @@ namespace AMBehaviorSystem.Node.Math.Basic
 
         [Input] public NumberPort In;
 
-        [Output] public Port Out;
+        [Output] public NumberPort Out;
     }
 }

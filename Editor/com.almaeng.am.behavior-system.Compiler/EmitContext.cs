@@ -1,71 +1,54 @@
-﻿//using AMBehaviorSystem.Node;
-//using AMBehaviorSystem.Node.Math.Advanced;
-//using GraphProcessor;
-//using System;
-//using System.Collections.Generic;
-//using System.Text;
+﻿using AMBehaviorSystem.Node;
+using GraphProcessor;
+using System;
+using System.Collections.Generic;
 
-//namespace AMBehaviorSystem.Compiler
-//{
-//    internal class EmitContext
-//    {
-//        private readonly Dictionary<string, string> nodeVarNames = new();
-//        private readonly Dictionary<string, Type> nodeVarTypes = new();
-//        private readonly List<(string TypeName, string VarName, string Expression)> declarations = new();
-//        private int varCounter;
+namespace AMBehaviorSystem.Compiler
+{
+    internal class EmitContext
+    {
+        private readonly Dictionary<string, (Type Type, string VariableName, string Expression)> variableCache = new();
 
-//        public string GetOrEmit(NodeGraph graph, BaseNode node, out Type portType)
-//            => GetOrEmit(graph, node, null, out portType);
+        public Type GetOutputType(NodeGraph graph, BaseNode node, string outputPort)
+        {
+            return GetVariable(graph, node, outputPort).Type;
+        }
 
-//        public string GetOrEmit(NodeGraph graph, BaseNode node, string outputPort, out Type portType)
-//        {
-//            string cacheKey = $"{node.GUID}:{outputPort}";
+        public string GetVariableName(NodeGraph graph, BaseNode node, string outputPort)
+        {
+            return GetVariable(graph, node, outputPort).VariableName;
+        }
 
-//            if (nodeVarNames.TryGetValue(cacheKey, out string existingVarName))
-//            {
-//                portType = nodeVarTypes[cacheKey];
-//                return existingVarName;
-//            }
+        public string GetExpression(NodeGraph graph, BaseNode node, string outputPort)
+        {
+            return GetVariable(graph, node, outputPort).Expression;
+        }
 
-//            if (node is SplitNode && outputPort != null)
-//            {
-//                string baseVarName = GetOrEmit(graph, node, null, out _);
-//                string memberAccess = outputPort switch
-//                {
-//                    "X" => "x",
-//                    "Y" => "y",
-//                    "Z" => "z",
-//                    "W" => "w",
-//                    _ => "x"
-//                };
+        public IEnumerable<string> GetDeclarations()
+        {
+            foreach ((Type type, string variableName, string expression) in variableCache.Values)
+            {
+                yield return $"{type.FullName} {variableName} = {expression};";
+            }
+        }
 
-//                string expression = $"{baseVarName}.{memberAccess}";
-//                portType = typeof(float);
+        public (Type Type, string VariableName, string Expression) GetVariable(NodeGraph graph, BaseNode node, string outputPort)
+        {
+            string cacheKey = $"{node.GUID}:{outputPort}";
 
-//                nodeVarNames[cacheKey] = expression;
-//                nodeVarTypes[cacheKey] = portType;
-//                return expression;
-//            }
+            if (variableCache.TryGetValue(cacheKey, out var cachedValue))
+            {
+                return cachedValue;
+            }
 
-//            (string expr, Type resolvedPortType) = ExpressionEmitter.EmitExpression(this, graph, node);
-//            portType = resolvedPortType;
+            (string expression, Type type) = ExpressionEmitter.EmitExpression(this, graph, node);
+            string variableName = $"{node.GetType().Name}_{outputPort}";
 
-//            string varName = $"var{++varCounter}";
-//            string typeName = "var";
+            (Type, string, string) result = (type, variableName, expression);
 
-//            declarations.Add((typeName, varName, expr));
-//            nodeVarNames[cacheKey] = varName;
-//            nodeVarTypes[cacheKey] = portType;
+            variableCache.Add(cacheKey, result);
 
-//            return varName;
-//        }
-
-//        public void WriteDeclarations(StringBuilder builder, int indent)
-//        {
-//            string tabs = new('\t', indent);
-
-//            foreach ((string typeName, string varName, string expression) in declarations)
-//                builder.AppendLine($"{tabs}{typeName} {varName} = {expression};");
-//        }
-//    }
-//}
+            return result;
+        }
+    }
+}

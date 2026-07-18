@@ -10,7 +10,7 @@ namespace AMBehaviorSystem.Node.Math.Advanced
     {
         public override string name => "Lerp";
 
-        protected override Type DefaultType => typeof(NumberPort);
+        protected override Type DefaultType => typeof(Vector2Port);
 
         [Input] public Port A;
         [Input] public Port B;
