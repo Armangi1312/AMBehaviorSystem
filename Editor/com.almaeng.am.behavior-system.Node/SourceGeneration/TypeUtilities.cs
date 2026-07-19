@@ -61,6 +61,7 @@ namespace AMBehaviorSystem.Node.SourceGeneration
             [typeof(ulong)] = "ulong",
             [typeof(float)] = "float",
             [typeof(double)] = "double",
+            [typeof(bool)] = "bool",
             [typeof(object)] = "object"
         };
 

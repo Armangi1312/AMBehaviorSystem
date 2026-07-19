@@ -33,7 +33,7 @@ namespace AMBehaviorSystem.Node.Math.Basic
             Argument rightArgument = new(b.Type, b.Name);
 
             ExpressionRule rule = new(
-                "# + #", typeof(bool),
+                "# + #", outType,
                 ArgumentConstraint.OfCategory(0, ArgumentCategory.Numeric),
                 ArgumentConstraint.OfCategory(1, ArgumentCategory.Numeric),
                 ArgumentConstraint.OfSameGroup(0, 1),
