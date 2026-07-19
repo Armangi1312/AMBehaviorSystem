@@ -16,10 +16,13 @@ namespace AMBehaviorSystem.Node.Constants
         {
             SourceContext context = ((NodeGraph)graph).SourceContext;
 
-            string value = $"{Field.ToString(CultureInfo.InvariantCulture)}";
-            string name = $"integer_{GUIDParse.GetGUIDParse(GUID)}";
+            string value = Field.ToString(CultureInfo.InvariantCulture);
+            string name = $"int_{GUIDParse.GetGUIDParse(GUID)}";
+
             Argument argument = new(typeof(int), value);
-            Expression expression = new(new[] { argument }, new[] { typeof(int) }, typeof(int), "#");
+            ExpressionRule rule = new("#", typeof(int), ArgumentConstraint.OfFixedType(0, typeof(int)));
+
+            Expression expression = new(argument, rule);
             DeclarationStatement statement = new(typeof(int), name, expression);
 
             context.InvokeStatements.Add(statement);

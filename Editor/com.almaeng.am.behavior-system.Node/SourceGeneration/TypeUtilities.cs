@@ -24,7 +24,7 @@ namespace AMBehaviorSystem.Node.SourceGeneration
             [typeof(Vector4)] = 10
         };
 
-        private static readonly IReadOnlyCollection<Type> scalarTypes = new HashSet<Type>()
+        private static readonly IReadOnlyCollection<Type> integerTypes = new HashSet<Type>()
         {
             typeof(sbyte),
             typeof(byte),
@@ -33,7 +33,11 @@ namespace AMBehaviorSystem.Node.SourceGeneration
             typeof(int),
             typeof(uint),
             typeof(long),
-            typeof(ulong),
+            typeof(ulong)
+        };
+
+        private static readonly IReadOnlyCollection<Type> floatTypes = new HashSet<Type>()
+        {
             typeof(float),
             typeof(double)
         };
@@ -85,14 +89,26 @@ namespace AMBehaviorSystem.Node.SourceGeneration
             return highestType;
         }
 
-        public static bool IsScalar(this Type type) => scalarTypes.Contains(type);
+        public static bool IsInteger(this Type type) => integerTypes.Contains(type);
+        public static bool IsFloat(this Type type) => floatTypes.Contains(type);
+
         public static bool IsVector(this Type type) => vectorTypes.Contains(type);
+
+        public static bool IsScalar(this Type type) => IsInteger(type) || IsFloat(type);
         public static bool IsNumeric(this Type type) => IsScalar(type) || IsVector(type);
+
+        public static bool CanCast(this Type original, Type castedType)
+        {
+            if (original.IsAssignableFrom(castedType)) return true;
+            if(original.IsNumeric() && castedType.IsNumeric()) return true;
+
+            return false;
+        }
 
         public static string GetCastedExpression(this Type originalType, Type castedType, string expression)
         {
-            bool isOriginalTypeVector = vectorTypes.Contains(originalType);
-            bool isCastedTypeVector = vectorTypes.Contains(castedType);
+            bool isOriginalTypeVector = originalType.IsVector();
+            bool isCastedTypeVector = castedType.IsVector();
 
             if (!isOriginalTypeVector && isCastedTypeVector)
                 return BuildScalarToVectorExpression(castedType, expression);

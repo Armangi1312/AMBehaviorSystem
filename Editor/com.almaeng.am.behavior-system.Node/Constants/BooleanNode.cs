@@ -17,8 +17,11 @@ namespace AMBehaviorSystem.Node.Constants
 
             string value = Field ? "true" : "false";
             string name = $"boolean_{GUIDParse.GetGUIDParse(GUID)}";
+
             Argument argument = new(typeof(bool), value);
-            Expression expression = new(new[] { argument }, new[] { typeof(bool) }, typeof(bool), "#");
+            ExpressionRule rule = new("#", typeof(bool), ArgumentConstraint.OfFixedType(0, typeof(bool)));
+
+            Expression expression = new(argument, rule);
             DeclarationStatement statement = new(typeof(bool), name, expression);
 
             context.InvokeStatements.Add(statement);

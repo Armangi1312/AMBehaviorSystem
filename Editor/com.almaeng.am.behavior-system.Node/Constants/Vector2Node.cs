@@ -17,10 +17,16 @@ namespace AMBehaviorSystem.Node.Constants
         {
             SourceContext context = ((NodeGraph)graph).SourceContext;
 
-            string value = $"new Vector2({Field.x.ToString(CultureInfo.InvariantCulture)}f, {Field.y.ToString(CultureInfo.InvariantCulture)}f)";
+            string x = Field.x.ToString(CultureInfo.InvariantCulture);
+            string y = Field.y.ToString(CultureInfo.InvariantCulture);
+
+            string value = $"new Vector2({x}f, {y}f)";
             string name = $"vector2_{GUIDParse.GetGUIDParse(GUID)}";
+
             Argument argument = new(typeof(Vector2), value);
-            Expression expression = new(new[] { argument }, new[] { typeof(Vector2) }, typeof(Vector2), "#");
+            ExpressionRule rule = new("#", typeof(Vector2), ArgumentConstraint.OfFixedType(0, typeof(Vector2)));
+
+            Expression expression = new(argument, rule);
             DeclarationStatement statement = new(typeof(Vector2), name, expression);
 
             context.InvokeStatements.Add(statement);

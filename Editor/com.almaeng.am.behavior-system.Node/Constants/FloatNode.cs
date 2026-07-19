@@ -18,8 +18,11 @@ namespace AMBehaviorSystem.Node.Constants
 
             string value = $"{Field.ToString(CultureInfo.InvariantCulture)}f";
             string name = $"float_{GUIDParse.GetGUIDParse(GUID)}";
+
             Argument argument = new(typeof(float), value);
-            Expression expression = new(new[] { argument }, new[] { typeof(float) }, typeof(float), "#");
+            ExpressionRule rule = new("#", typeof(float), ArgumentConstraint.OfFixedType(0, typeof(float)));
+
+            Expression expression = new(argument, rule);
             DeclarationStatement statement = new(typeof(float), name, expression);
 
             context.InvokeStatements.Add(statement);
