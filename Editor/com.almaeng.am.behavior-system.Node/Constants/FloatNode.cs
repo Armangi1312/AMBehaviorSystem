@@ -26,7 +26,7 @@ namespace AMBehaviorSystem.Node.Constants
             DeclarationStatement statement = new(typeof(float), name, expression);
 
             context.InvokeStatements.Add(statement);
-            context.OutputLocals[GUID] = (typeof(float), name);
+            context.OutputLocals[PortKey.Of(GUID, nameof(Out))] = (typeof(float), name);
         }
     }
 }

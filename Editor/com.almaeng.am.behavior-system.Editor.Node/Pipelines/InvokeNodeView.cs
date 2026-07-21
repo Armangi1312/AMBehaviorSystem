@@ -46,7 +46,7 @@ namespace AMBehaviorSystem.Editor.Node.Pipelines
 
         private void ShowAddMenu(ListView listView, InvokeNode node)
         {
-            Object controller = Graph?.TargetController;
+            Object controller = Graph != null ? Graph.TargetController : null;
 
             if (controller == null) return;
 

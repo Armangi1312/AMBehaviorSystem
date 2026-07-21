@@ -1,4 +1,5 @@
 using AMBehaviorSystem.Node.Ports;
+using AMBehaviorSystem.Node.SourceGeneration;
 using GraphProcessor;
 using System;
 using System.Collections.Generic;
@@ -27,6 +28,43 @@ namespace AMBehaviorSystem.Node.Math.Advanced
         [Output] public NumberPort Y;
         [Output] public NumberPort Z;
         [Output] public NumberPort W;
+
+        protected override void Process()
+        {
+            SourceContext context = ((NodeGraph)graph).SourceContext;
+
+            (Type Type, string Name) input = NodeUtilities.GetInputVariable(nameof(In), context, this);
+
+            int count = GetComponentCount();
+            string[] axisNames = { "x", "y", "z", "w" };
+            string[] portNames = { nameof(X), nameof(Y), nameof(Z), nameof(W) };
+
+            for (int i = 0; i < count; i++)
+            {
+                if (!IsPortConnected(portNames[i])) continue;
+
+                string variableName = $"{portNames[i].ToLowerInvariant()}_{GUIDParse.GetGUIDParse(GUID)}";
+
+                Argument argument = new(input.Type, $"{input.Name}.{axisNames[i]}");
+                ExpressionRule rule = new("#", typeof(float),
+                    ArgumentConstraint.OfCategory(0, ArgumentCategory.Vector));
+
+                Expression expression = new(argument, rule);
+
+                DeclarationStatement statement = new(typeof(float), variableName, expression);
+
+                context.InvokeStatements.Add(statement);
+                context.OutputLocals[PortKey.Of(GUID, portNames[i])] = (typeof(float), variableName);
+            }
+        }
+
+        private bool IsPortConnected(string portName)
+        {
+            NodePort port = outputPorts.FirstOrDefault(p => p.portData.identifier == portName);
+            int edgeCount = port?.GetEdges().Count ?? -1;
+            Debug.Log($"portName={portName}, found={port != null}, edgeCount={edgeCount}");
+            return port != null && edgeCount > 0;
+        }
 
         private int GetComponentCount()
         {

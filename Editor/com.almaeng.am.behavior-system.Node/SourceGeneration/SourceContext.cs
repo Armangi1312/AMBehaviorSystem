@@ -21,8 +21,8 @@ namespace AMBehaviorSystem.Node.SourceGeneration
             "UnityEngine"
         };
 
-        public Dictionary<string, (Type Type, string Name)> OutputFields { get; } = new();
-        public Dictionary<string, (Type Type, string Name)> OutputLocals { get; } = new();
+        public Dictionary<PortKey, (Type Type, string Name)> OutputFields { get; } = new();
+        public Dictionary<PortKey, (Type Type, string Name)> OutputLocals { get; } = new();
 
         public string Name { get; }
         public string Namespace { get; }

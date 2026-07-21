@@ -2,7 +2,8 @@
     "name": "com.almaeng.am.behavior-system.Node",
     "rootNamespace": "AMBehaviorSystem.Node",
     "references": [
-        "GUID:3275b29aab67b134eb7e009153685e80"
+        "GUID:3275b29aab67b134eb7e009153685e80",
+        "GUID:620312d820417fe418b967bdd61e7209"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

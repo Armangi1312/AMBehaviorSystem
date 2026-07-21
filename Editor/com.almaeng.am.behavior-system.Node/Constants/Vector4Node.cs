@@ -32,7 +32,7 @@ namespace AMBehaviorSystem.Node.Constants
             DeclarationStatement statement = new(typeof(Vector4), name, expression);
 
             context.InvokeStatements.Add(statement);
-            context.OutputLocals[GUID] = (typeof(Vector4), name);
+            context.OutputLocals[PortKey.Of(GUID, nameof(Out))] = (typeof(Vector4), name);
         }
     }
 }

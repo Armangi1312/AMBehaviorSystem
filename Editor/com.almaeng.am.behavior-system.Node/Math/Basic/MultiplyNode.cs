@@ -54,7 +54,7 @@ namespace AMBehaviorSystem.Node.Math.Basic
             DeclarationStatement statement = new(outType, name, expression);
 
             context.InvokeStatements.Add(statement);
-            context.OutputLocals[GUID] = (outType, name);
+            context.OutputLocals[PortKey.Of(GUID, nameof(Out))] = (outType, name);
         }
     }
 }

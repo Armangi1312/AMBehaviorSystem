@@ -14,16 +14,24 @@ namespace AMBehaviorSystem.Node.SourceGeneration
             if (edges.Count == 0)
                 throw new InvalidOperationException($"Port {fieldName} on {node.name} has no connected edge.");
 
-            BaseNode sourceNode = edges[0].outputNode;
+            SerializableEdge edge = edges[0];
+            BaseNode sourceNode = edge.outputNode;
 
-            if (context.OutputLocals.TryGetValue(sourceNode.GUID, out (Type Type, string Name) local))
+            string portIdentifier = string.IsNullOrEmpty(edge.outputPortIdentifier)
+                ? edge.outputFieldName
+                : edge.outputPortIdentifier;
+
+            PortKey key = string.IsNullOrEmpty(portIdentifier)
+                ? PortKey.Default(sourceNode.GUID)
+                : PortKey.Of(sourceNode.GUID, portIdentifier);
+
+            if (context.OutputLocals.TryGetValue(key, out (Type Type, string Name) local))
                 return local;
 
-            if (context.OutputFields.TryGetValue(sourceNode.GUID, out (Type Type, string Name) field))
+            if (context.OutputFields.TryGetValue(key, out (Type Type, string Name) field))
                 return field;
 
-            throw new InvalidOperationException($"No output variable found for node {sourceNode.name} ({sourceNode.GUID}).");
+            throw new InvalidOperationException($"No output variable found for node {sourceNode.name} ({sourceNode.GUID}), port {portIdentifier}.");
         }
-
     }
 }

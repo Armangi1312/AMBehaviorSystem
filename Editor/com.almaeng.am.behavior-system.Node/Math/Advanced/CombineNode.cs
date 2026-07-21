@@ -1,9 +1,11 @@
 ﻿using AMBehaviorSystem.Node.Ports;
+using AMBehaviorSystem.Node.SourceGeneration;
 using GraphProcessor;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using UnityEngine;
 
 namespace AMBehaviorSystem.Node.Math.Advanced
 {
@@ -26,6 +28,55 @@ namespace AMBehaviorSystem.Node.Math.Advanced
         [Input] public NumberPort W;
 
         [Output] public Port Out;
+
+        protected override void Process()
+        {
+            SourceContext context = ((NodeGraph)graph).SourceContext;
+
+            Type outputType = GetOutputType() switch
+            {
+                Type type when type == typeof(Vector4Port) => typeof(Vector4),
+                Type type when type == typeof(Vector3Port) => typeof(Vector3),
+                _ => typeof(Vector2)
+            };
+
+            string[] axisNames = { "x", "y", "z", "w" };
+            string[] fieldNames = { nameof(X), nameof(Y), nameof(Z), nameof(W) };
+            int componentCount = outputType == typeof(Vector4) ? 4 : outputType == typeof(Vector3) ? 3 : 2;
+
+            List<string> componentExpressions = new();
+
+            for (int i = 0; i < componentCount; i++)
+            {
+                if (connectedFields.Contains(fieldNames[i]))
+                {
+                    (Type Type, string Name) input = NodeUtilities.GetInputVariable(fieldNames[i], context, this);
+
+                    Argument argument = new(input.Type, input.Name);
+                    ExpressionRule rule = new("#", typeof(float), ArgumentConstraint.OfCategory(0, ArgumentCategory.Scalar));
+
+                    Expression expression = new(argument, rule);
+                    componentExpressions.Add(expression.ToString());
+                }
+                else
+                {
+                    componentExpressions.Add("0f");
+                }
+            }
+
+            string name = $"combine_{GUIDParse.GetGUIDParse(GUID)}";
+            string template = $"new {outputType.Name}({string.Join(", ", componentExpressions)})";
+
+            Argument dummyArgument = new(outputType, template);
+            ExpressionRule dummyRule = new("#", outputType, ArgumentConstraint.OfFixedType(0, outputType));
+
+            Expression finalExpression = new(dummyArgument, dummyRule);
+
+            DeclarationStatement statement = new(outputType, name, finalExpression);
+
+            context.InvokeStatements.Add(statement);
+            context.OutputLocals[PortKey.Of(GUID, nameof(Out))] = (outputType, name);
+        }
 
         public override IEnumerable<FieldInfo> OverrideFieldOrder(IEnumerable<FieldInfo> fields)
         {
@@ -58,7 +109,7 @@ namespace AMBehaviorSystem.Node.Math.Advanced
             UpdateAllPorts();
         }
 
-        private Type ResolveOutputType()
+        private Type GetOutputType()
         {
             int maxIndex = ComponentIndexX;
 
@@ -76,7 +127,7 @@ namespace AMBehaviorSystem.Node.Math.Advanced
         [CustomPortBehavior(nameof(Out))]
         private IEnumerable<PortData> OutPortBehavior(List<SerializableEdge> edges)
         {
-            yield return new PortData { identifier = nameof(Out), displayName = nameof(Out), displayType = ResolveOutputType() };
+            yield return new PortData { identifier = nameof(Out), displayName = nameof(Out), displayType = GetOutputType() };
         }
     }
 }
