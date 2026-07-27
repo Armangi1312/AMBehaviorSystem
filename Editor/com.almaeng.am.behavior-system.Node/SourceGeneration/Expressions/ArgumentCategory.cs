@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AMBehaviorSystem.Node.SourceGeneration
+namespace AMBehaviorSystem.Node.SourceGeneration.Expressions
 {
     [Flags]
     public enum ArgumentCategory

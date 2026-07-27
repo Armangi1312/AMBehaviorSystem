@@ -1,6 +1,8 @@
-﻿using System;
+﻿using AMBehaviorSystem.Node.SourceGeneration.Expressions;
+using AMBehaviorSystem.Node.SourceGeneration.Utilities;
+using System;
 
-namespace AMBehaviorSystem.Node.SourceGeneration
+namespace AMBehaviorSystem.Node.SourceGeneration.Statements
 {
     public class DeclarationStatement : Statement
     {
@@ -67,6 +69,17 @@ namespace AMBehaviorSystem.Node.SourceGeneration
                 AccessModifier.None => string.Empty,
                 _ => string.Empty
             };
+        }
+
+        public enum AccessModifier
+        {
+            Public,
+            Protected,
+            Private,
+            Internal,
+            ProtectedInternal,
+            PrivateProtected,
+            None
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using AMBehaviorSystem.Node.SourceGeneration;
+﻿using AMBehaviorSystem.Node.SourceGeneration.Context;
 using GraphProcessor;
 using UnityEngine;
 
@@ -16,7 +16,7 @@ namespace AMBehaviorSystem.Node
         }
 
         public SourceContext SourceContext { get; } = new("Test", "Test", typeof(int), typeof(int), typeof(int));
-
+        
         public void Resolve() => controllerReference.Resolve();
     }
 }

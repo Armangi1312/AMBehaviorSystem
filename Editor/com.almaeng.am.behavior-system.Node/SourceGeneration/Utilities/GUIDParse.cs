@@ -1,4 +1,4 @@
-﻿namespace AMBehaviorSystem.Node.SourceGeneration
+﻿namespace AMBehaviorSystem.Node.SourceGeneration.Utilities
 {
     internal static class GUIDParse
     {

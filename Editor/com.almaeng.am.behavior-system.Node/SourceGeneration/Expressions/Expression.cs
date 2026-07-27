@@ -1,9 +1,9 @@
-﻿using System;
+﻿using AMBehaviorSystem.Node.SourceGeneration.Utilities;
+using System;
 using System.Linq;
 using System.Text;
-using UnityEngine;
 
-namespace AMBehaviorSystem.Node.SourceGeneration
+namespace AMBehaviorSystem.Node.SourceGeneration.Expressions
 {
     public class Expression
     {
@@ -21,7 +21,6 @@ namespace AMBehaviorSystem.Node.SourceGeneration
             Arguments = arguments;
             ExpressionRules = expressionRules;
         }
-
         public override string ToString()
         {
             if (Arguments == null || Arguments.Length == 0 || ExpressionRules == null || ExpressionRules.Length == 0)

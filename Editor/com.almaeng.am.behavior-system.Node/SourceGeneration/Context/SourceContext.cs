@@ -1,8 +1,10 @@
-﻿using System;
+﻿using AMBehaviorSystem.Node.SourceGeneration.Statements;
+using AMBehaviorSystem.Node.SourceGeneration.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace AMBehaviorSystem.Node.SourceGeneration
+namespace AMBehaviorSystem.Node.SourceGeneration.Context
 {
     public class SourceContext
     {
@@ -54,47 +56,56 @@ namespace AMBehaviorSystem.Node.SourceGeneration
         {
             StringBuilder builder = new();
 
-            foreach (string @namespace in UsingNamespaces)
-            {
-                builder.AppendLine($"using {@namespace};");
-            }
-
+            AppendUsingDirectives(builder);
             builder.AppendLine();
-            builder.AppendLine($"namespace {Namespace}");
-            builder.AppendLine("{");
-            builder.AppendLine($"\tpublic class {Name} : BasePipeline<{ProcessorType.FullName}, {SettingType.FullName}, {ContextType.FullName}>");
-            builder.AppendLine("\t{");
-
-            foreach (Statement statement in MemberStatements)
-            {
-                builder.AppendLine($"\t\t{statement}");
-            }
-
+            AppendNamespaceAndClassHeader(builder);
+            AppendMembers(builder);
             builder.AppendLine();
-            builder.AppendLine($"\t\tpublic override void Initialize(IReadOnlyList<{ProcessorType.FullName}> processors, IReadOnlyRegistry<{SettingType.FullName}> settings, IReadOnlyRegistry<{ContextType.FullName}> contexts, Component owner)");
-            builder.AppendLine("\t\t{");
-
-            foreach (Statement statement in InitializeStatements)
-            {
-                builder.AppendLine($"\t\t\t{statement}");
-            }
-
-            builder.AppendLine("\t\t}");
+            AppendInitializeMethod(builder);
             builder.AppendLine();
+            AppendInvokeMethod(builder);
 
-            builder.AppendLine("\t\tpublic override void Invoke(InvokeTiming timing)");
-            builder.AppendLine("\t\t{");
-
-            foreach (Statement statement in InvokeStatements)
-            {
-                builder.AppendLine($"\t\t\t{statement}");
-            }
-
-            builder.AppendLine("\t\t}");
             builder.AppendLine("\t}");
             builder.AppendLine("}");
 
             return builder.ToString();
+        }
+
+        private void AppendUsingDirectives(StringBuilder builder)
+        {
+            foreach (string @namespace in UsingNamespaces)
+            {
+                builder.AppendLine($"using {@namespace};");
+            }
+        }
+
+        private void AppendNamespaceAndClassHeader(StringBuilder builder)
+        {
+            builder.AppendLine($"namespace {Namespace}");
+            builder.AppendLine("{");
+            builder.AppendLine($"\tpublic class {Name} : BasePipeline<{ProcessorType.FullName}, {SettingType.FullName}, {ContextType.FullName}>");
+            builder.AppendLine("\t{");
+        }
+
+        private void AppendMembers(StringBuilder builder)
+        {
+            builder.Append(CodeFormatUtility.RenderStatements(MemberStatements, 2));
+        }
+
+        private void AppendInitializeMethod(StringBuilder builder)
+        {
+            builder.AppendLine($"\t\tpublic override void Initialize(IReadOnlyList<{ProcessorType.FullName}> processors, IReadOnlyRegistry<{SettingType.FullName}> settings, IReadOnlyRegistry<{ContextType.FullName}> contexts, Component owner)");
+            builder.AppendLine("\t\t{");
+            builder.Append(CodeFormatUtility.RenderStatements(InitializeStatements, 3));
+            builder.AppendLine("\t\t}");
+        }
+
+        private void AppendInvokeMethod(StringBuilder builder)
+        {
+            builder.AppendLine("\t\tpublic override void Invoke(InvokeTiming timing)");
+            builder.AppendLine("\t\t{");
+            builder.Append(CodeFormatUtility.RenderStatements(InvokeStatements, 3));
+            builder.AppendLine("\t\t}");
         }
     }
 }

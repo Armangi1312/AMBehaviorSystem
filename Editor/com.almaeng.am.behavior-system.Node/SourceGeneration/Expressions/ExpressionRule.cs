@@ -1,9 +1,9 @@
-﻿using System;
+﻿using AMBehaviorSystem.Node.SourceGeneration.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
-namespace AMBehaviorSystem.Node.SourceGeneration
+namespace AMBehaviorSystem.Node.SourceGeneration.Expressions
 {
     public record ExpressionRule
     {

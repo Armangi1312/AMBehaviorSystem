@@ -1,8 +1,9 @@
-﻿using GraphProcessor;
+﻿using AMBehaviorSystem.Node.SourceGeneration.Context;
+using GraphProcessor;
 using System;
 using System.Collections.Generic;
 
-namespace AMBehaviorSystem.Node.SourceGeneration
+namespace AMBehaviorSystem.Node.SourceGeneration.Utilities
 {
     internal static class NodeUtilities
     {

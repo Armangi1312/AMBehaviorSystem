@@ -1,5 +1,8 @@
 using AMBehaviorSystem.Core;
-using AMBehaviorSystem.Node.SourceGeneration;
+using AMBehaviorSystem.Node.SourceGeneration.Context;
+using AMBehaviorSystem.Node.SourceGeneration.Expressions;
+using AMBehaviorSystem.Node.SourceGeneration.Statements;
+using AMBehaviorSystem.Node.SourceGeneration.Utilities;
 using GraphProcessor;
 using System;
 using System.Collections.Generic;
@@ -23,11 +26,11 @@ namespace AMBehaviorSystem.Node.Pipelines
             {
                 string typeName = FormatTypeName(ProcessorTypes[i]);
 
-                string processorName = typeName.ToCamelCase();
+                string processorName = CodeFormatUtility.ToCamelCase(typeName);
 
                 if(context.OutputLocals.TryAdd(PortKey.Of(GUID, processorName), (typeof(Processor), processorName)))
                 {
-                    DeclarationStatement declaration = new(AccessModifier.Private, typeof(Processor), processorName);
+                    DeclarationStatement declaration = new(DeclarationStatement.AccessModifier.Private, typeof(Processor), processorName);
 
                     Argument genericArgument = new(typeof(Type), typeName);
                     Argument processorsArgument = new(typeof(IReadOnlyList<Processor>), "processors");

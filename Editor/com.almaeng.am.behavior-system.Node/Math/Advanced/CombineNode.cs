@@ -1,5 +1,8 @@
 ﻿using AMBehaviorSystem.Node.Ports;
-using AMBehaviorSystem.Node.SourceGeneration;
+using AMBehaviorSystem.Node.SourceGeneration.Context;
+using AMBehaviorSystem.Node.SourceGeneration.Expressions;
+using AMBehaviorSystem.Node.SourceGeneration.Statements;
+using AMBehaviorSystem.Node.SourceGeneration.Utilities;
 using GraphProcessor;
 using System;
 using System.Collections.Generic;

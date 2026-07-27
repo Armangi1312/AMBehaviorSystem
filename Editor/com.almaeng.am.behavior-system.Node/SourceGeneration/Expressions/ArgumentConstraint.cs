@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AMBehaviorSystem.Node.SourceGeneration
+namespace AMBehaviorSystem.Node.SourceGeneration.Expressions
 {
     public readonly struct ArgumentConstraint
     {

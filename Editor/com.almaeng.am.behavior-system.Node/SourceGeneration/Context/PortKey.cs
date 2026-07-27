@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AMBehaviorSystem.Node.SourceGeneration
+namespace AMBehaviorSystem.Node.SourceGeneration.Context
 {
     public readonly struct PortKey : IEquatable<PortKey>
     {
@@ -27,7 +27,7 @@ namespace AMBehaviorSystem.Node.SourceGeneration
         }
 
         public bool Equals(PortKey other) => NodeGUID == other.NodeGUID && Identifier == other.Identifier;
-        public override bool Equals(object obj) => obj is PortKey other && Equals(other);
+        public override bool Equals(object @object) => @object is PortKey other && Equals(other);
         public override int GetHashCode() => HashCode.Combine(NodeGUID, Identifier);
     }
 }
