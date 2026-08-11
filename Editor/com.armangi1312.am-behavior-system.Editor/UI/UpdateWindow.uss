@@ -1,0 +1,88 @@
+.header-container {
+    padding: 20px 20px 10px 20px;
+}
+
+.title-label {
+    font-size: 20px;
+    -unity-font-style: bold;
+    color: rgb(220, 220, 220);
+    margin-bottom: 4px;
+}
+
+.subtitle-label {
+    font-size: 14px;
+    color: rgb(150, 150, 150);
+}
+
+.version-container {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(45, 45, 45);
+    border-radius: 6px;
+    margin: 0 20px 16px 20px;
+    padding: 12px 16px;
+}
+
+.version-current {
+    font-size: 16px;
+    color: rgb(150, 150, 150);
+    margin-right: 12px;
+}
+
+.version-arrow {
+    font-size: 16px;
+    color: rgb(120, 120, 120);
+    margin-right: 12px;
+}
+
+.version-new {
+    font-size: 16px;
+    -unity-font-style: bold;
+    color: rgb(220, 220, 220);
+}
+
+.changelog-container {
+    margin: 0 20px 20px 20px;
+}
+
+.changelog-title {
+    font-size: 13px;
+    color: rgb(120, 120, 120);
+    margin-bottom: 8px;
+}
+
+.changelog-item {
+    font-size: 14px;
+    color: rgb(200, 200, 200);
+    margin-bottom: 6px;
+    white-space: normal;
+}
+
+.changelog-container {
+    margin: 0 20px 20px 20px;
+    flex-grow: 1;
+}
+
+.button-container {
+    flex-direction: row;
+    border-top-width: 1px;
+    border-top-color: rgb(60, 60, 60);
+}
+
+.dialog-button {
+    flex-grow: 1;
+    border-radius: 0;
+    border-width: 0;
+    border-right-width: 1px;
+    border-right-color: rgb(60, 60, 60);
+    background-color: rgba(0, 0, 0, 0);
+    height: 44px;
+    font-size: 14px;
+}
+
+.update-button {
+    border-right-width: 0;
+    -unity-font-style: bold;
+    color: rgb(90, 160, 255);
+}

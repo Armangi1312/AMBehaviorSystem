@@ -1,0 +1,14 @@
+{
+    "name": "com.armangi1312.am-behavior-system",
+    "rootNamespace": "AMBehaviorSystem",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

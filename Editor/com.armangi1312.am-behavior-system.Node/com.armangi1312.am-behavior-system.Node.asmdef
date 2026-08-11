@@ -1,0 +1,17 @@
+{
+    "name": "com.armangi1312.am-behavior-system.Node",
+    "rootNamespace": "AMBehaviorSystem.Node",
+    "references": [
+        "GUID:afda0c409b84f5944888297c4961cc00",
+        "GUID:c329d51cccbb5dd4a8fec86cd56077c5"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,0 +1,18 @@
+{
+    "name": "com.armangi1312.am-behavior-system.Editor",
+    "rootNamespace": "AMBehaviorSystem.Editor",
+    "references": [
+        "GUID:afda0c409b84f5944888297c4961cc00"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
