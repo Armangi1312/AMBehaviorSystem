@@ -2,7 +2,7 @@
 
 namespace AMBehaviorSystem.Node.SourceGeneration.Traversal
 {
-    public interface ISourceGenerationNode
+    public interface ISourceGenerationNode : ISourceNode
     {
         void Generate(SourceContext context);
     }

@@ -76,6 +76,22 @@ namespace AMBehaviorSystem.Editor.UI
                 return;
             }
 
+            Label currentVersionLabel = root.Q<Label>("CurrentVersionLabel");
+            Label latestVersionLabel = root.Q<Label>("LatestVersionLabel");
+
+            Label changelogLabel = root.Q<Label>("ChangelogLabel");
+
+            if (currentVersionLabel == null || latestVersionLabel == null || changelogLabel == null)
+            {
+                Debug.LogError("[UpdateWindow] Required buttons not found in UXML.");
+                return;
+            }
+
+            currentVersionLabel.text = UpdateUtilities.CurrentVersion?.ToString() ?? "Unknown";
+            latestVersionLabel.text = UpdateUtilities.LatestVersion?.ToString() ?? "Unknown";
+
+            changelogLabel.text = UpdateUtilities.ChangeLog ?? "Cannot load changelog";
+
             cancelButton.clicked += OnCancelButtonClicked;
             updateButton.clicked += OnUpdateButtonClicked;
         }

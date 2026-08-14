@@ -1,4 +1,5 @@
 ﻿using AMBehaviorSystem.Node.SourceGeneration.Expressions;
+using AMBehaviorSystem.Node.SourceGeneration.Utilities;
 using System.Collections.Generic;
 using System.Text;
 
@@ -24,18 +25,18 @@ namespace AMBehaviorSystem.Node.SourceGeneration.Statements
             builder.AppendLine($"if ({Condition})");
             builder.AppendLine("{");
 
-            foreach (Statement statement in TrueStatements)
+            foreach(Statement statement in TrueStatements)
             {
-                builder.AppendLine($"\t{statement}");
+                builder.AppendLine(CodeFormatUtility.Indent(statement.ToString()));
             }
 
             builder.AppendLine("}");
             builder.AppendLine("else");
             builder.AppendLine("{");
 
-            foreach (Statement statement in FalseStatements)
+            foreach(Statement statement in FalseStatements)
             {
-                builder.AppendLine($"\t{statement}");
+                builder.AppendLine(CodeFormatUtility.Indent(statement.ToString()));
             }
 
             builder.Append("}");

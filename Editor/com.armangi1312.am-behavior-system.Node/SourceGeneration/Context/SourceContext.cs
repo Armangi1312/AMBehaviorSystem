@@ -3,6 +3,7 @@ using AMBehaviorSystem.Node.SourceGeneration.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using UnityEngine;
 
 namespace AMBehaviorSystem.Node.SourceGeneration.Context
 {
@@ -25,6 +26,7 @@ namespace AMBehaviorSystem.Node.SourceGeneration.Context
 
         public Dictionary<PortKey, (Type Type, string Name)> OutputFields { get; } = new();
         public Dictionary<PortKey, (Type Type, string Name)> OutputLocals { get; } = new();
+        public HashSet<string> DeclaredProcessors { get; } = new();
 
         public string Name { get; }
         public string Namespace { get; }
@@ -50,30 +52,40 @@ namespace AMBehaviorSystem.Node.SourceGeneration.Context
             InvokeStatements.Clear();
             OutputLocals.Clear();
             OutputFields.Clear();
+            DeclaredProcessors.Clear();
         }
 
         public override string ToString()
         {
-            StringBuilder builder = new();
+            try
+            {
+                StringBuilder builder = new();
 
-            AppendUsingDirectives(builder);
-            builder.AppendLine();
-            AppendNamespaceAndClassHeader(builder);
-            AppendMembers(builder);
-            builder.AppendLine();
-            AppendInitializeMethod(builder);
-            builder.AppendLine();
-            AppendInvokeMethod(builder);
+                AppendUsingDirectives(builder);
+                builder.AppendLine();
+                AppendNamespaceAndClassHeader(builder);
+                AppendMembers(builder);
+                builder.AppendLine();
+                AppendInitializeMethod(builder);
+                builder.AppendLine();
+                AppendInvokeMethod(builder);
 
-            builder.AppendLine("\t}");
-            builder.AppendLine("}");
+                builder.AppendLine("\t}");
+                builder.AppendLine("}");
 
-            return builder.ToString();
+                return builder.ToString();
+            }
+            catch(Exception ex)
+            {
+                Debug.LogError($"Error generating source for '{Name}': {ex.Message}\n{ex.StackTrace}");
+                Debug.LogError(ex);
+                return "";
+            }
         }
 
         private void AppendUsingDirectives(StringBuilder builder)
         {
-            foreach (string @namespace in UsingNamespaces)
+            foreach(string @namespace in UsingNamespaces)
             {
                 builder.AppendLine($"using {@namespace};");
             }

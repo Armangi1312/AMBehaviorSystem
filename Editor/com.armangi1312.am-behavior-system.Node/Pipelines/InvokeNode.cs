@@ -20,14 +20,16 @@ namespace AMBehaviorSystem.Node.Pipelines
 
         public void Generate(SourceContext context)
         {
-            for (int i = 0; i < ProcessorTypes.Count; i++)
+            for(int i = 0; i < ProcessorTypes.Count; i++)
             {
                 string typeName = FormatTypeName(ProcessorTypes[i]);
 
                 string processorName = CodeFormatUtility.ToCamelCase(typeName);
 
-                if (context.OutputLocals.TryAdd(PortKey.Of(GUID, processorName), (typeof(Processor), processorName)))
+                if(!context.DeclaredProcessors.Contains(typeName))
                 {
+                    context.DeclaredProcessors.Add(typeName);
+
                     DeclarationStatement declaration = new(DeclarationStatement.AccessModifier.Private, typeof(Processor), processorName);
 
                     Argument genericArgument = new(typeof(Type), typeName);
@@ -44,10 +46,12 @@ namespace AMBehaviorSystem.Node.Pipelines
                     context.MemberStatements.Add(declaration);
                 }
 
+                context.OutputLocals[PortKey.Of(GUID, processorName)] = (typeof(Processor), processorName);
+
                 Argument processorArgument = new(typeof(Processor), processorName);
                 Argument invokeTimingArgument = new(typeof(InvokeTiming), "timing");
 
-                ExpressionRule rule = new("Invoke(#, #)", typeof(void),
+                ExpressionRule rule = new("InvokeProcessor(#, #)", typeof(void),
                     ArgumentConstraint.OfFixedType(0, typeof(Processor)),
                     ArgumentConstraint.OfFixedType(1, typeof(InvokeTiming)));
 

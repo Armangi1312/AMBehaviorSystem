@@ -1,19 +1,17 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
-    <Style src="project://database/Packages/com.armangi1312.am-behavior-system/Editor/com.armangi1312.am-behavior-system.Editor/UI/UpdateWindow.uss?fileID=7433441132597879392&amp;guid=91309f2feb4441245b45dfe957b30967&amp;type=3#UpdateWindow"/>
+    <Style src="project://database/Assets/com.armangi1312.am-behavior-system/Editor/com.armangi1312.am-behavior-system.Editor/UI/UpdateWindow.uss?fileID=7433441132597879392&amp;guid=91309f2feb4441245b45dfe957b30967&amp;type=3#UpdateWindow"/>
     <ui:VisualElement name="HeaderContainer" class="header-container">
         <ui:Label text="Update available" class="title-label"/>
         <ui:Label text="AM Behavior System" class="subtitle-label"/>
     </ui:VisualElement>
     <ui:VisualElement name="VersionContainer" class="version-container">
-        <ui:Label text="v1.2.0" class="version-current"/>
+        <ui:Label text="v1.0.0" name="CurrentVersionLabel" class="version-current"/>
         <ui:Label text="→" class="version-arrow"/>
-        <ui:Label text="v1.3.0" class="version-new"/>
+        <ui:Label text="v1.0.0" name="LatestVersionLabel" class="version-new"/>
     </ui:VisualElement>
     <ui:VisualElement name="ChangelogContainer" class="changelog-container">
         <ui:Label text="Changelog" class="changelog-title"/>
-        <ui:Label text="- Fixed node graph reload issue on domain reload" class="changelog-item"/>
-        <ui:Label text="- Improved source generation performance" class="changelog-item"/>
-        <ui:Label text="- Added settings panel for source generation path" class="changelog-item"/>
+        <ui:Label text="He can eat pieces of a poop.&#10;" name="ChangelogLabel" class="changelog-item"/>
     </ui:VisualElement>
     <ui:VisualElement name="ButtonContainer" class="button-container" style="background-position-x: center; background-position-y: center; -unity-text-align: lower-left;">
         <ui:Button text="Cancel" name="CancelButton" class="dialog-button" style="-unity-background-image-tint-color: rgb(255, 255, 255);"/>
