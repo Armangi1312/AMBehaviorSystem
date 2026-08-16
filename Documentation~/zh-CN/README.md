@@ -14,10 +14,6 @@
     使用 AM Behavior System，在运行时自由组合、替换并可视化您的行为。</i>
 </p>
 
-> [!CAUTION]
-> 本项目目前处于 Alpha 阶段，可能存在不稳定的情况。
-> 如发现任何问题，请通过 [Github Issues](https://github.com/Armangi1312/AMBehaviorSystem/issues) 提交 Bug 报告。
-
 ---
 
 - [한국어](https://github.com/Armangi1312/AMBehaviorSystem/tree/main/Documentation~/ko-KR/README.md)
@@ -60,14 +56,7 @@ AM Behavior System 可通过 Unity Package Manager 进行安装。
 
 粘贴 `https://github.com/Armangi1312/AMBehaviorSystem.git`，然后点击 `Add` 按钮即可开始安装。
 安装完成后，即可立即开始使用 AM Behavior System。
-以下示例项目已包含在内：
-
-- **1. Basic**：展示 AM Behavior System 基本用法的示例。
-- **2. Platformer**：展示平台类游戏中常见行为的示例。
-- **3. FPS**：展示第一人称射击游戏中常见行为的示例。
 
 ---
 
-## 3. 更多信息
-
-如需了解更多用法及详细说明，请参阅 [文档](https://github.com/Armangi1312/AMBehaviorSystem/tree/main/Documentation~/zh-CN/DOCUMENTATION.md)。
+请通过 [Github Issues](https://github.com/Armangi1312/AMBehaviorSystem/issues) 提交 Bug 报告。
