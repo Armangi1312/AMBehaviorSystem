@@ -22,17 +22,21 @@ namespace AMBehaviorSystem.Node.Pipelines
         {
             for(int i = 0; i < ProcessorTypes.Count; i++)
             {
-                string typeName = FormatTypeName(ProcessorTypes[i]);
+                Debug.Log($"Processing processor type: {ProcessorTypes[i]}");
+                (string assemblyName, string @namespace, string className, string fullName) = ParseTypeString(ProcessorTypes[i]);
 
-                string processorName = CodeFormatUtility.ToCamelCase(typeName);
+                string processorName = CodeFormatUtility.ToCamelCase(className);
 
-                if(!context.DeclaredProcessors.Contains(typeName))
+                if(!context.DeclaredProcessors.Contains(fullName))
                 {
-                    context.DeclaredProcessors.Add(typeName);
+                    context.DeclaredProcessors.Add(fullName);
+
+                    if(!string.IsNullOrEmpty(@namespace))
+                        context.UsingNamespaces.Add(@namespace);
 
                     DeclarationStatement declaration = new(DeclarationStatement.AccessModifier.Private, typeof(Processor), processorName);
 
-                    Argument genericArgument = new(typeof(Type), typeName);
+                    Argument genericArgument = new(typeof(Type), className);
                     Argument processorsArgument = new(typeof(IReadOnlyList<Processor>), "processors");
 
                     ExpressionRule assignmentRule = new("Find<#>(#)", typeof(Processor),
@@ -63,16 +67,19 @@ namespace AMBehaviorSystem.Node.Pipelines
             }
         }
 
-        private static string FormatTypeName(string fullTypeName)
+        private static (string AssemblyName, string Namespace, string ClassName, string FullName) ParseTypeString(string typeString)
         {
-            if (string.IsNullOrEmpty(fullTypeName)) return "(null)";
+            int spaceIndex = typeString.IndexOf(' ');
 
-            int spaceIndex = fullTypeName.IndexOf(' ');
-            if (spaceIndex < 0) return fullTypeName;
+            string assemblyName = typeString[..spaceIndex];
+            string fullName = typeString[(spaceIndex + 1)..];
 
-            string typeName = fullTypeName[(spaceIndex + 1)..];
-            int dotIndex = typeName.LastIndexOf('.');
-            return dotIndex >= 0 ? typeName[(dotIndex + 1)..] : typeName;
+            int lastDotIndex = fullName.LastIndexOf('.');
+
+            string @namespace = lastDotIndex >= 0 ? fullName[..lastDotIndex] : string.Empty;
+            string className = lastDotIndex >= 0 ? fullName[(lastDotIndex + 1)..] : fullName;
+
+            return (assemblyName, @namespace, className, fullName);
         }
     }
 }

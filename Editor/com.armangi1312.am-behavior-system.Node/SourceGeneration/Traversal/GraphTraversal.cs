@@ -115,8 +115,6 @@ namespace AMBehaviorSystem.Node.SourceGeneration.Traversal
 
         public override void UpdateComputeOrder()
         {
-            //if(nodes == null || nodes.Count == 0) return;
-
             nodes = graph.nodes.OrderBy(n => n.computeOrder).ToList();
         }
     }
