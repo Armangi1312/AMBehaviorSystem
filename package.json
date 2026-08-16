@@ -1,0 +1,27 @@
+{
+  "name": "com.armangi1312.am-behavior-system",
+  "version": "1.0.0",
+  "displayName": "AM Behavior System",
+  "description": "A processor-based modular behavior framework for Unity. Compose game logic by chaining configurable pipelines at runtime with hierarchical contexts and reusable settings.",
+  "unity": "6000.0",
+  "documentationUrl": "https://github.com/Armangi1312/AMBehaviorSystem/blob/main/README.md",
+  "changelogUrl": "https://github.com/Armangi1312/AMBehaviorSystem/blob/main/CHANGELOG.md",
+  "license": "MIT",
+  "licensesUrl": "https://github.com/Armangi1312/AMBehaviorSystem/blob/main/LICENSE.md",
+  "keywords": [
+    "unity",
+    "modular",
+    "behavior",
+    "pipeline",
+    "framework",
+    "gameplay",
+    "controller",
+    "am",
+    "system"
+  ],
+  "author": {
+    "name": "Armangi1312",
+    "email": "ghoonykim@gmail.com",
+    "url": "https://github.com/Armangi1312/"
+  }
+}

@@ -14,10 +14,6 @@
     AM Behavior System lets you compose, swap, and visualize them at runtime.</i>
 </p>
 
-> [!CAUTION]
-> This project is currently in alpha and may not be stable.
-> Please report any bugs via [Github Issues](https://github.com/Armangi1312/AMBehaviorSystem/issues).
-
 ---
 
 - [한국어](README.md)
@@ -61,14 +57,7 @@ Open the Unity Package Manager, click the `+` button in the top-left corner, and
 
 Paste `https://github.com/Armangi1312/AMBehaviorSystem.git` and click the `Add` button to begin installation.
 Once installed, you can start using AM Behavior System right away.
-The following samples are included:
-
-- **1. Basic**: A sample demonstrating the basic usage of AM Behavior System.
-- **2. Platformer**: A sample showcasing behaviors commonly found in platformer games.
-- **3. FPS**: A sample showcasing behaviors commonly found in FPS games.
 
 ---
 
-## 3. Further Information
-
-For additional usage details and in-depth documentation, please refer to the [Documentation](https://github.com/Armangi1312/AMBehaviorSystem/tree/main/Documentation~/en-US/DOCUMENTATION.md).
+Please report any bugs via [Github Issues](https://github.com/Armangi1312/AMBehaviorSystem/issues).

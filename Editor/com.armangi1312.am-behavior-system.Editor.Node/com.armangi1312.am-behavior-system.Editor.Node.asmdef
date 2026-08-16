@@ -1,0 +1,20 @@
+{
+    "name": "com.armangi1312.am-behavior-system.Editor.Node",
+    "rootNamespace": "AMBehaviorSystem.Editor.Node",
+    "references": [
+        "GUID:4a1c4592808d9454e8aa9daf42b8374b",
+        "GUID:afda0c409b84f5944888297c4961cc00",
+        "GUID:14d33a32b1e30c8478997a2ffe4279d4",
+        "GUID:c329d51cccbb5dd4a8fec86cd56077c5",
+        "GUID:c7a7d54ab9e4bd14d975403f3645db05"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

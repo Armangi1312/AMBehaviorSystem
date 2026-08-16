@@ -14,10 +14,6 @@
     AM Behavior System으로 동작을 조합하고, 교체하고, 시각적으로 확인하세요.</i>
 </p>
 
-> [!CAUTION]
-> 이 프로젝트는 현재 알파 단계로 안전하지 않을 수 있습니다.
-> [Github Issues](https://github.com/Armangi1312/AMBehaviorSystem/issues)에 버그를 보고해주시면 감사하겠습니다.
-
 ---
 
 - [한국어](https://github.com/Armangi1312/AMBehaviorSystem/tree/main/Documentation~/ko-KR/README.md)
@@ -61,14 +57,9 @@ AM Behavior System은 유니티 패키지 매니저에서 설치할 수 있습�
 
 `https://github.com/Armangi1312/AMBehaviorSystem.git` 을 복사 붙여넣고 `Add` 버튼을 클릭하면 설치가 시작됩니다.
 설치가 다 되면 이제부터 AM Behavior System을 사용할 수 있습니다.
-다음과 같은 샘플이 제공됩니다.
 
-- **1. Basic**: AM Behavior System의 기본적인 사용법을 보여주는 샘플입니다.
-- **2. Platformer**: 플랫폼 게임에서 흔히 볼 수 있는 행동들을 보여주는 샘플입니다.
-- **3. FPS**: FPS 게임에서 흔히 볼 수 있는 행동들을 보여주는 샘플입니다.
-
----
+---ㄴ
 
 ## 3. 이외로
 
-추가적인 사용법 및 자세한 설명은 [Documentation](https://github.com/Armangi1312/AMBehaviorSystem/tree/main/Documentation~/ko-KR/DOCUMENTATION.md)를 참고해주세요. 
+[Github Issues](https://github.com/Armangi1312/AMBehaviorSystem/issues)에 버그를 보고해주시면 감사하겠습니다.
