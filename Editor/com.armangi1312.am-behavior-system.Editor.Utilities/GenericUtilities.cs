@@ -1,37 +1,38 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace AMBehaviorSystem.Editor
+namespace AMBehaviorSystem.Editor.Utilities
 {
-    internal static class GenericUtilities
+    public static class GenericUtilities
     {
         private static readonly Dictionary<Type, Type[]> inheritedTypesCache = new();
         private static Assembly[] cachedAssemblies;
 
         public static Type[] CollectInheritedTypes(Type baseType)
         {
-            if (baseType == null)
+            if(baseType == null)
                 return Array.Empty<Type>();
 
-            if (inheritedTypesCache.TryGetValue(baseType, out Type[] cached))
+            if(inheritedTypesCache.TryGetValue(baseType, out Type[] cached))
                 return cached;
 
             List<Type> result = new();
             cachedAssemblies ??= AppDomain.CurrentDomain.GetAssemblies();
 
-            foreach (Assembly assembly in cachedAssemblies)
+            foreach(Assembly assembly in cachedAssemblies)
             {
                 Type[] types;
-                try { types = assembly.GetTypes(); }
+                try
+                { types = assembly.GetTypes(); }
                 catch { continue; }
 
-                foreach (Type type in types)
+                foreach(Type type in types)
                 {
-                    if (type.IsAbstract || type.IsInterface || type.ContainsGenericParameters)
+                    if(type.IsAbstract || type.IsInterface || type.ContainsGenericParameters)
                         continue;
 
-                    if (baseType.IsAssignableFrom(type))
+                    if(baseType.IsAssignableFrom(type))
                         result.Add(type);
                 }
             }
@@ -41,26 +42,22 @@ namespace AMBehaviorSystem.Editor
             return arr;
         }
 
-        public static Type[] ResolveElementTypes(Type type)
+        public static Type[] GetElementTypes(Type type)
         {
-            if (type != null && type.IsGenericType)
-            {
+            if(type != null && type.IsGenericType)
                 return type.GetGenericArguments();
-            }
 
             return Array.Empty<Type>();
         }
 
-        public static Type[] ResolveInheritedElementTypes(Type type)
+        public static Type[] GetInheritedElementTypes(Type type)
         {
             Type current = type;
 
-            while (current != null && current != typeof(object))
+            while(current != null && current != typeof(object))
             {
-                if (current.IsGenericType)
-                {
+                if(current.IsGenericType)
                     return current.GetGenericArguments();
-                }
 
                 current = current.BaseType;
             }
@@ -68,9 +65,9 @@ namespace AMBehaviorSystem.Editor
             return Array.Empty<Type>();
         }
 
-        public static bool TryResolveElementTypes(Type type, out Type[] elementTypes)
+        public static bool TryGetElementTypes(Type type, out Type[] elementTypes)
         {
-            if (type != null && type.IsGenericType)
+            if(type != null && type.IsGenericType)
             {
                 elementTypes = type.GetGenericArguments();
                 return true;
@@ -80,13 +77,13 @@ namespace AMBehaviorSystem.Editor
             return false;
         }
 
-        public static bool TryResolveInheritedElementTypes(Type type, out Type[] elementTypes)
+        public static bool TryGetInheritedElementTypes(Type type, out Type[] elementTypes)
         {
             Type current = type;
 
-            while (current != null && current != typeof(object))
+            while(current != null && current != typeof(object))
             {
-                if (current.IsGenericType)
+                if(current.IsGenericType)
                 {
                     elementTypes = current.GetGenericArguments();
                     return true;
@@ -104,13 +101,34 @@ namespace AMBehaviorSystem.Editor
             List<Type> chain = new();
             Type current = type;
 
-            while (current != null && current != typeof(object))
+            while(current != null && current != typeof(object))
             {
                 chain.Insert(0, current);
                 current = current.BaseType;
             }
 
             return chain;
+        }
+
+        public static Type GetInheritedGenericType(Type type, int index)
+        {
+            Type[] types = GetInheritedElementTypes(type);
+
+            return types.Length > index ? types[index] : null;
+        }
+
+        public static bool TryGetInheritedGenericType(Type type, int index, out Type outType)
+        {
+            outType = null;
+
+            if(!TryGetInheritedElementTypes(type, out Type[] types))
+                return false;
+
+            if(types.Length <= index)
+                return false;
+
+            outType = types[index];
+            return outType != null;
         }
     }
 }

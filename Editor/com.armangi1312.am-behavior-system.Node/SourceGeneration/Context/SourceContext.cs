@@ -15,10 +15,10 @@ namespace AMBehaviorSystem.Node.SourceGeneration.Context
 
         public HashSet<string> UsingNamespaces = new()
         {
-            "AMBehaviorSystem.Core",
-            "AMBehaviorSystem.Core.Attributes",
-            "AMBehaviorSystem.Core.Pipelines",
-            "AMBehaviorSystem.Core.Utilities",
+            "AMBehaviorSystem",
+            "AMBehaviorSystem.Attributes",
+            "AMBehaviorSystem.Pipelines",
+            "AMBehaviorSystem.Utilities",
             "System",
             "System.Collections.Generic",
             "UnityEngine"
@@ -26,7 +26,11 @@ namespace AMBehaviorSystem.Node.SourceGeneration.Context
 
         public Dictionary<PortKey, (Type Type, string Name)> OutputFields { get; } = new();
         public Dictionary<PortKey, (Type Type, string Name)> OutputLocals { get; } = new();
+
         public HashSet<string> DeclaredProcessors { get; } = new();
+        public HashSet<string> DeclaredComponents { get; } = new();
+        public HashSet<string> DeclaredSettings { get; } = new();
+        public HashSet<string> DeclaredContexts { get; } = new();
 
         public string Name { get; }
         public string Namespace { get; }
@@ -50,9 +54,23 @@ namespace AMBehaviorSystem.Node.SourceGeneration.Context
             MemberStatements.Clear();
             InitializeStatements.Clear();
             InvokeStatements.Clear();
+
+            UsingNamespaces.Clear();
+            UsingNamespaces.Add("AMBehaviorSystem");
+            UsingNamespaces.Add("AMBehaviorSystem.Attributes");
+            UsingNamespaces.Add("AMBehaviorSystem.Pipelines");
+            UsingNamespaces.Add("AMBehaviorSystem.Utilities");
+            UsingNamespaces.Add("System");
+            UsingNamespaces.Add("System.Collections.Generic");
+            UsingNamespaces.Add("UnityEngine");
+
             OutputLocals.Clear();
             OutputFields.Clear();
+
             DeclaredProcessors.Clear();
+            DeclaredComponents.Clear();
+            DeclaredSettings.Clear();
+            DeclaredContexts.Clear();
         }
 
         public override string ToString()
@@ -93,9 +111,14 @@ namespace AMBehaviorSystem.Node.SourceGeneration.Context
 
         private void AppendNamespaceAndClassHeader(StringBuilder builder)
         {
+            AddNamespaceIfNotEmpty(ProcessorType.Namespace);
+            AddNamespaceIfNotEmpty(SettingType.Namespace);
+            AddNamespaceIfNotEmpty(ContextType.Namespace);
+
             builder.AppendLine($"namespace {Namespace}");
             builder.AppendLine("{");
-            builder.AppendLine($"\tpublic class {Name} : BasePipeline<{ProcessorType.FullName}, {SettingType.FullName}, {ContextType.FullName}>");
+            builder.AppendLine("\t[Serializable]");
+            builder.AppendLine($"\tpublic class {Name} : BasePipeline<{ProcessorType.Name}, {SettingType.Name}, {ContextType.Name}>");
             builder.AppendLine("\t{");
         }
 
@@ -106,7 +129,7 @@ namespace AMBehaviorSystem.Node.SourceGeneration.Context
 
         private void AppendInitializeMethod(StringBuilder builder)
         {
-            builder.AppendLine($"\t\tpublic override void Initialize(IReadOnlyList<{ProcessorType.FullName}> processors, IReadOnlyRegistry<{SettingType.FullName}> settings, IReadOnlyRegistry<{ContextType.FullName}> contexts, Component owner)");
+            builder.AppendLine($"\t\tpublic override void Initialize(IReadOnlyList<{ProcessorType.Name}> processors, IReadOnlyRegistry<{SettingType.Name}> settings, IReadOnlyRegistry<{ContextType.Name}> contexts, Component owner)");
             builder.AppendLine("\t\t{");
             builder.Append(CodeFormatUtility.RenderStatements(InitializeStatements, 3));
             builder.AppendLine("\t\t}");
@@ -118,6 +141,12 @@ namespace AMBehaviorSystem.Node.SourceGeneration.Context
             builder.AppendLine("\t\t{");
             builder.Append(CodeFormatUtility.RenderStatements(InvokeStatements, 3));
             builder.AppendLine("\t\t}");
+        }
+
+        private void AddNamespaceIfNotEmpty(string @namespace)
+        {
+            if(!string.IsNullOrEmpty(@namespace))
+                UsingNamespaces.Add(@namespace);
         }
     }
 }

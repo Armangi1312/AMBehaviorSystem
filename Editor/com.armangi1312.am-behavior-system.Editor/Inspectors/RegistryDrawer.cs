@@ -1,3 +1,4 @@
+using AMBehaviorSystem.Editor.Utilities;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -17,7 +18,7 @@ namespace AMBehaviorSystem.Editor.Inspectors
             if (arrayProperty == null)
                 return new Label($"{property.displayName}: backing field not found");
 
-            return new RegistryField(property, arrayProperty, GenericUtilities.ResolveElementTypes(fieldInfo.FieldType)[0]);
+            return new RegistryField(property, arrayProperty, GenericUtilities.GetElementTypes(fieldInfo.FieldType)[0]);
         }
     }
 }

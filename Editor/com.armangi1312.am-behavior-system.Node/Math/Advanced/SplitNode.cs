@@ -48,8 +48,7 @@ namespace AMBehaviorSystem.Node.Math.Advanced
                 string variableName = $"{portNames[i].ToLowerInvariant()}_{GUIDParse.GetGUIDParse(GUID)}";
 
                 Argument argument = new(input.Type, $"{input.Name}.{axisNames[i]}");
-                ExpressionRule rule = new("#", typeof(float),
-                    ArgumentConstraint.OfCategory(0, ArgumentCategory.Vector));
+                ExpressionRule rule = new("#", typeof(float), ArgumentConstraint.OfCategory(0, ArgumentCategory.Vector));
 
                 Expression expression = new(argument, rule);
 
@@ -64,7 +63,7 @@ namespace AMBehaviorSystem.Node.Math.Advanced
         {
             NodePort port = outputPorts.FirstOrDefault(p => p.portData.identifier == portName);
             int edgeCount = port?.GetEdges().Count ?? -1;
-            Debug.Log($"portName={portName}, found={port != null}, edgeCount={edgeCount}");
+
             return port != null && edgeCount > 0;
         }
 

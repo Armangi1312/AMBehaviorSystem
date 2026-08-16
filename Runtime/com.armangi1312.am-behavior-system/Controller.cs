@@ -51,7 +51,7 @@ namespace AMBehaviorSystem
         /// </summary>
         [field: SerializeReference] public ObservableList<TProcessor> Processors { get; protected set; } = new();
 
-        [field: SerializeReference] public BasePipeline<TProcessor, TSetting, TContext> Pipeline { get; protected set; } = null;
+        [field: SerializeReference] public BasePipeline<TProcessor, TSetting, TContext> Pipeline { get; set; } = null;
 
         //==== 내부 프로퍼티 ====//
 
@@ -91,11 +91,6 @@ namespace AMBehaviorSystem
                     Debug.LogError($"Failed to initialize processor '{processor.GetType().Name}': {e}");
                 }
             }
-        }
-
-        protected virtual void InitializePipeline()
-        {
-            Pipeline?.Initialize(Processors, Settings, Contexts, this);
         }
 
         #endregion
@@ -268,5 +263,17 @@ namespace AMBehaviorSystem
         }
 
         #endregion
+
+        #region 파이프라인
+
+#if UNITY_EDITOR
+        [SerializeField] private ScriptableObject pipelineGraph; 
+#endif
+
+        protected virtual void InitializePipeline()
+        {
+            Pipeline?.Initialize(Processors, Settings, Contexts, this);
+        }
+#endregion
     }
 }

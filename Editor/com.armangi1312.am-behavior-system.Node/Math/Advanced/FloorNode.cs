@@ -30,8 +30,7 @@ namespace AMBehaviorSystem.Node.Math.Advanced
 
             string template = input.Type == typeof(double) ? "Math.Floor(#)" : "MathF.Floor(#)";
 
-            ExpressionRule rule = new(template, outType,
-                ArgumentConstraint.OfCategory(0, ArgumentCategory.Float));
+            ExpressionRule rule = new(template, outType, ArgumentConstraint.OfCategory(0, ArgumentCategory.Float));
 
             Expression expression = new(argument, rule);
 

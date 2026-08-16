@@ -29,8 +29,7 @@ namespace AMBehaviorSystem.Node.Math.Advanced
 
             Argument argument = new(input.Type, input.Name);
 
-            ExpressionRule rule = new("#.normalized", outType,
-                ArgumentConstraint.OfCategory(0, ArgumentCategory.Vector));
+            ExpressionRule rule = new("#.normalized", outType, ArgumentConstraint.OfCategory(0, ArgumentCategory.Vector));
 
             Expression expression = new(argument, rule);
 

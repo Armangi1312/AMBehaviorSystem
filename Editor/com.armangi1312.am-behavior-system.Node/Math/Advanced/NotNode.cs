@@ -28,8 +28,7 @@ namespace AMBehaviorSystem.Node.Math.Advanced
 
             Argument argument = new(input.Type, input.Name);
 
-            ExpressionRule rule = new("!#", outType,
-                ArgumentConstraint.OfFixedType(0, typeof(bool)));
+            ExpressionRule rule = new("!#", outType, ArgumentConstraint.OfFixedType(0, typeof(bool)));
 
             Expression expression = new(argument, rule);
 
