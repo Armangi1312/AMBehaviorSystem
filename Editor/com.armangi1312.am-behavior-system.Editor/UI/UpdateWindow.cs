@@ -28,7 +28,10 @@ namespace AMBehaviorSystem.Editor.UI
         {
             EditorApplication.delayCall -= DelayCall;
 
-            ShowWindowByRequest();
+            if(UpdateUtilities.IsUpdateAvailable())
+            {
+                ShowWindowByRequest();
+            }
         }
 
         [MenuItem("Window/AM Behavior System/Update")]
