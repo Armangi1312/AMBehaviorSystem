@@ -37,6 +37,12 @@ namespace AMBehaviorSystem.Editor.UI
         [MenuItem("Window/AM Behavior System/Update")]
         public static void ShowWindowByMenu()
         {
+            if(!UpdateUtilities.IsUpdateAvailable())
+            {
+                EditorUtility.DisplayDialog("Update", "There's nothing to update", "Ok");
+                return;
+            }
+
             UpdateWindow window = GetWindow<UpdateWindow>();
             window.titleContent = new GUIContent("Update");
         }

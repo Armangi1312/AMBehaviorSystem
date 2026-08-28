@@ -74,7 +74,7 @@ namespace AMBehaviorSystem.Editor
         {
             try
             {
-                string fullChangeLog = File.ReadAllText(await httpClient.GetStringAsync(ChangeLogUrl));
+                string fullChangeLog = await httpClient.GetStringAsync(ChangeLogUrl);
 
                 MatchCollection headerMatches = Regex.Matches(fullChangeLog, @"^#{1,2}\s*(\d+\.\d+\.\d+).*$", RegexOptions.Multiline);
                 Dictionary<Version, string> sections = new();
@@ -87,7 +87,7 @@ namespace AMBehaviorSystem.Editor
 
                     string body = fullChangeLog[startIndex..endIndex].Trim('-', ' ', '\n', '\r');
 
-                    sections[version] = body;
+                    sections[version] = Regex.Replace(body, @"^-\s*", "", RegexOptions.Multiline);
                 }
                 ChangeLogs = sections;
             }
