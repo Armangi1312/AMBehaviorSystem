@@ -1,7 +1,9 @@
 using AMBehaviorSystem.Editor.Utilities;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEditor.PackageManager;
 using UnityEditor.PackageManager.Requests;
@@ -29,7 +31,7 @@ namespace AMBehaviorSystem.Editor
         public static Version CurrentVersion { get; private set; }
         public static Version LatestVersion { get; private set; }
 
-        public static string ChangeLog { get; private set; }
+        public static IReadOnlyDictionary<Version, string> ChangeLogs { get; private set; }
 
         [Serializable]
         private struct Package
@@ -72,7 +74,22 @@ namespace AMBehaviorSystem.Editor
         {
             try
             {
-                ChangeLog = await httpClient.GetStringAsync(ChangeLogUrl);
+                string fullChangeLog = File.ReadAllText(await httpClient.GetStringAsync(ChangeLogUrl));
+
+                MatchCollection headerMatches = Regex.Matches(fullChangeLog, @"^#{1,2}\s*(\d+\.\d+\.\d+).*$", RegexOptions.Multiline);
+                Dictionary<Version, string> sections = new();
+
+                for(int i = 0; i < headerMatches.Count; i++)
+                {
+                    Version version = new(headerMatches[i].Groups[1].Value);
+                    int startIndex = headerMatches[i].Index + headerMatches[i].Length;
+                    int endIndex = i + 1 < headerMatches.Count ? headerMatches[i + 1].Index : fullChangeLog.Length;
+
+                    string body = fullChangeLog[startIndex..endIndex].Trim('-', ' ', '\n', '\r');
+
+                    sections[version] = body;
+                }
+                ChangeLogs = sections;
             }
             catch (Exception exception)
             {

@@ -14,17 +14,6 @@ namespace AMBehaviorSystem.Editor.Utilities
         [field: SerializeField] public string SourceGenerationPath { get; set; } = "Generated";
         [field: SerializeField] public string SourceGenerationNamespace { get; set; } = "AMBehaviorSystem.Generated";
 
-        private bool isLoading = true;
-
-        private void OnValidate()
-        {
-            if(isLoading)
-            {
-                isLoading = false;
-                return;
-            }
-
-            Save(true);
-        }
+        public void Save() => Save(true);
     }
 }

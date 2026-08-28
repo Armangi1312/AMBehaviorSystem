@@ -94,7 +94,7 @@ namespace AMBehaviorSystem.Editor.UI
             currentVersionLabel.text = UpdateUtilities.CurrentVersion?.ToString() ?? "Unknown";
             latestVersionLabel.text = UpdateUtilities.LatestVersion?.ToString() ?? "Unknown";
 
-            changelogLabel.text = UpdateUtilities.ChangeLog ?? "Cannot load changelog";
+            changelogLabel.text = UpdateUtilities.ChangeLogs[UpdateUtilities.LatestVersion] ?? "Cannot load changelog";
 
             cancelButton.clicked += OnCancelButtonClicked;
             updateButton.clicked += OnUpdateButtonClicked;
