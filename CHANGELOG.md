@@ -7,3 +7,9 @@
 - Fixed a bug where update changes were not displaying correctly.
 - Changed to use relative paths when loading UI elements.
 ---
+
+## 1.0.3 Update
+- Added the CurrentTiming API to the Processor.
+- Added comments and explanations.
+- Translated comments into English.
+---
