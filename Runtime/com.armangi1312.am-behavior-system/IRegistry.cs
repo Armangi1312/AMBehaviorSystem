@@ -3,45 +3,45 @@
 namespace AMBehaviorSystem
 {
     /// <summary>
-    /// 클래스 객체를 등록하는 인터페이스입니다.
+    /// An interface for registering class objects.
     /// </summary>
     public interface IRegistry
     {
         /// <summary>
-        /// 새로운 객체를 등록합니다.
+        /// Registers a new object.
         /// </summary>
-        /// <param name="item">등록할 객체</param>
-        /// <returns>등록이 가능한지</returns>
+        /// <param name="item">The object to register.</param>
+        /// <returns>Whether registration is possible.</returns>
         public bool Register(object item);
 
         /// <summary>
-        /// 특정 객체를 등록 해제합니다.
+        /// Unregisters a specific object.
         /// </summary>
-        /// <param name="type">등록 해제할 객체의 타입</param>
-        /// <param name="item">등록 해제된 객체</param>
-        /// <returns>등록 해제가 가능한지</returns>
+        /// <param name="type">The type of the object to unregister</param>
+        /// <param name="item">The object to unregister</param>
+        /// <returns>Whether unregistration is possible</returns>
         public bool Unregister(Type type, out object item);
     }
 
     /// <summary>
-    /// 클래스 객체를 등록하는 인터페이스입니다.
+    /// An interface for registering class objects.
     /// </summary>
     public interface IRegistry<TBase> : IRegistry
     {
         /// <summary>
-        /// 새로운 객체를 등록합니다.
+        /// Registers a new object.
         /// </summary>
-        /// /// <typeparam name="T">등록할 객체의 타입</typeparam>
-        /// <param name="item">등록할 객체</param>
-        /// <returns>등록이 가능한지</returns>
+        /// <typeparam name="T">The type of the object to register.</typeparam>
+        /// <param name="item">The object to register.</param>
+        /// <returns>Whether registration is possible.</returns>
         public bool Register<T>(T item) where T : TBase;
 
         /// <summary>
-        /// 특정 객체를 등록 해제합니다.
+        /// Unregisters a specific object.
         /// </summary>
-        /// <typeparam name="T">등록 해제할 객체의 타입</typeparam>
-        /// <param name="item">등록 해제된 객체</param>
-        /// <returns>등록 해제가 가능한지</returns>
+        /// <typeparam name="T">The type of the object to unregister.</typeparam>
+        /// <param name="item">The object to unregister.</param>
+        /// <returns>Whether unregistration is possible.</returns>
         public bool Unregister<T>(out T item) where T : TBase;
     }
 }

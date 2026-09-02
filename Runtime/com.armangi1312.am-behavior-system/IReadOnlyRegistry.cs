@@ -3,61 +3,62 @@
 namespace AMBehaviorSystem
 {
     /// <summary>
-    /// 클래스 객체를 등록하는 인터페이스입니다.
-    /// (읽기 전용)
+    /// Interface for registering class objects.
+    /// (Read-only)
     /// </summary>
     public interface IReadOnlyRegistry
     {
         /// <summary>
-        /// 등록된 클래스 객체를 반환합니다.
+        /// Returns the registered class object.
         /// </summary>
-        /// <param name="type">객체의 자료형</param>
-        /// <returns>등록된 클래스 객체</returns>
+        /// <param name="type">The data type of the object</param>
+        /// <returns>The registered class object</returns>
         object Get(Type type);
 
         /// <summary>
-        /// 등록된 클래스 객체를 반환합니다.
+        /// Returns the registered class object.
         /// </summary>
-        /// <param name="type">객체의 자료형</param>
-        /// <param name="value">등록된 클래스 객체</param>
-        /// <returns>반환할 수 있는지 여부</returns>
+        /// <param name="type">The data type of the object</param>
+        /// <param name="value">The registered class object</param>
+        /// <returns>Whether the object can be returned</returns>
         bool TryGet(Type type, out object value);
 
         /// <summary>
-        /// 등록된 클래스 객체를 반환합니다.
+        /// Returns the registered class object.
         /// </summary>
-        /// <param name="type">객체의 자료형</param>
-        /// <returns>등록된 클래스 객체</returns>
+        /// <param name="type">The data type of the object</param>
+        /// <returns>The registered class object</returns>
         bool Contains(Type type);
     }
 
     /// <summary>
-    /// 클래스 객체를 등록하는 인터페이스입니다.
-    /// (읽기 전용)
+    /// Interface for registering class objects.
+    /// (Read-only)
     /// </summary>
+    /// <typeparam name="TBase">The base type for registered objects.</typeparam>
     public interface IReadOnlyRegistry<TBase> : IReadOnlyRegistry
     {
         /// <summary>
-        /// 등록된 클래스 객체를 반환합니다.
+        /// Returns the registered class object.
         /// </summary>
-        /// <typeparam name="T">객체의 타입</typeparam>
-        /// <returns>등록된 클래스 객체</returns>
+        /// <typeparam name="T">The type of the object</typeparam>
+        /// <returns>The registered class object</returns>
         T Get<T>() where T : TBase;
 
         /// <summary>
-        /// 등록된 클래스 객체를 반환합니다.        
+        /// Returns the registered class object.
         /// </summary>
-        /// <typeparam name="T">객체의 타입</typeparam>
-        /// <param name="value">등록된 클래스 객체</param>
-        /// <returns>반환할 수 있는지 여부</returns>
+        /// <typeparam name="T">The type of the object</typeparam>
+        /// <param name="value">The registered class object</param>
+        /// <returns>Whether the object can be returned</returns>
         bool TryGet<T>(out T value) where T : TBase;
 
         /// <summary>
-        /// 등록된 클래스 객체를 반환합니다.        
+        /// Returns the registered class object.
         /// </summary>
-        /// <typeparam name="T">객체의 타입</typeparam>
-        /// <param name="value">등록된 클래스 객체</param>
-        /// <returns>반환할 수 있는지 여부</returns>
+        /// <typeparam name="T">The type of the object</typeparam>
+        /// <param name="value">The registered class object</param>
+        /// <returns>Whether the object can be returned</returns>
         bool Contains<T>() where T : TBase;
     }
 }

@@ -7,6 +7,9 @@ using UnityEngine;
 
 namespace AMBehaviorSystem
 {
+    /// <summary>
+    /// A abstract controller that manages and invokes Settings, Context, and Processors.
+    /// </summary>
     public abstract class Controller : MonoBehaviour 
     {
         /// <summary>
@@ -29,6 +32,12 @@ namespace AMBehaviorSystem
         public abstract bool IsContextRequired(Type type);
     }
 
+    /// <summary>
+    /// A controller that manages and invokes Settings, Context, and Processors.
+    /// </summary>
+    /// <typeparam name="TSetting">The type of settings used by this processor.</typeparam>
+    /// <typeparam name="TContext">The type of context accessed by this processor.</typeparam>
+    /// <typeparam name="TProcessor">The type of processor managed by this controller.</typeparam>
     public abstract partial class Controller<TSetting, TContext, TProcessor> : Controller
         where TSetting : ISetting
         where TContext : IContext
@@ -244,6 +253,7 @@ namespace AMBehaviorSystem
                 TProcessor processor = Processors[i];
                 if (processor == null || (processor.InvokeTiming & timing) == 0) continue;
 
+                processor.CurrentTiming = timing;
                 processor.Process();
             }
         }

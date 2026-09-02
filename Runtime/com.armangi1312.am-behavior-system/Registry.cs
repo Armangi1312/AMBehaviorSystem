@@ -5,19 +5,19 @@ using UnityEngine;
 namespace AMBehaviorSystem
 {
     /// <summary>
-    /// 클래스 객체를 등록하는 객체입니다.
+    /// An object that registers class objects.
     /// </summary>
-    /// <typeparam name="TBase">등록할 객체의 필터링 타입</typeparam>
+    /// <typeparam name="TBase">The filtering type for the objects to be registered.</typeparam>
     [Serializable]
     public class Registry<TBase> : IRegistry<TBase>, IReadOnlyRegistry<TBase>
     {
         [field: SerializeReference] public List<TBase> SerializedObjects { get; protected set; } = new();
 
         /// <summary>
-        /// 등록된 클래스 객체를 반환합니다.
+        /// Returns the registered class object.
         /// </summary>
-        /// <typeparam name="T">객체의 타입</typeparam>
-        /// <returns>등록된 클래스 객체</returns>
+        /// <typeparam name="T">The type of the object</typeparam>
+        /// <returns>The registered class object</returns>
         public T Get<T>() where T : TBase
         {
             for (int i = 0; i < SerializedObjects.Count; i++)
@@ -28,10 +28,10 @@ namespace AMBehaviorSystem
         }
 
         /// <summary>
-        /// 등록된 클래스 객체를 반환합니다.
+        /// Returns the registered class object.
         /// </summary>
-        /// <param name="type">객체의 자료형</param>
-        /// <returns>등록된 클래스 객체</returns>
+        /// <param name="type">The type of the object</param>
+        /// <returns>The registered class object</returns>
         public object Get(Type type)
         {
             for (int i = 0; i < SerializedObjects.Count; i++)
@@ -42,11 +42,11 @@ namespace AMBehaviorSystem
         }
 
         /// <summary>
-        /// 등록된 클래스 객체를 반환합니다.
+        /// Returns the registered class object.
         /// </summary>
-        /// <typeparam name="T">객체의 타입</typeparam>
-        /// <param name="value">등록된 클래스 객체</param>
-        /// <returns>반환할 수 있는지 여부</returns>
+        /// <typeparam name="T">The type of the object</typeparam>
+        /// <param name="value">The registered class object</param>
+        /// <returns>Whether the object can be returned</returns>
         public bool TryGet<T>(out T value) where T : TBase
         {
             for (int i = 0; i < SerializedObjects.Count; i++)
@@ -62,11 +62,11 @@ namespace AMBehaviorSystem
         }
 
         /// <summary>
-        /// 등록된 클래스 객체를 반환합니다.
+        /// Returns the registered class object.
         /// </summary>
-        /// <param name="type">객체의 자료형</param>
-        /// <param name="value">등록된 클래스 객체</param>
-        /// <returns>반환할 수 있는지 여부</returns>
+        /// <param name="type">The data type of the object</param>
+        /// <param name="value">The registered class object</param>
+        /// <returns>Whether the object can be returned</returns>
         public bool TryGet(Type type, out object value)
         {
             for (int i = 0; i < SerializedObjects.Count; i++)
@@ -82,18 +82,18 @@ namespace AMBehaviorSystem
         }
 
         /// <summary>
-        /// 지정된 타입의 객체가 등록되어 있는지 확인합니다.
+        /// Checks whether an object of the specified type is registered.
         /// </summary>
-        /// <typeparam name="T">확인할 타입</typeparam>
+        /// <typeparam name="T">The type to check.</typeparam>
         public bool Contains<T>() where T : TBase
         {
             return Contains(typeof(T));
         }
 
         /// <summary>
-        /// 지정된 타입의 객체가 등록되어 있는지 확인합니다.
+        /// Checks whether an object of the specified type is registered.
         /// </summary>
-        /// <param name="type">확인할 타입</param>
+        /// <param name="type">The type to check</param>
         public bool Contains(Type type)
         {
             for (int i = 0; i < SerializedObjects.Count; i++)
@@ -104,11 +104,11 @@ namespace AMBehaviorSystem
         }
 
         /// <summary>
-        /// 새로운 객체를 등록합니다.
+        /// Registers a new object.
         /// </summary>
-        /// <typeparam name="T">등록할 객체의 타입</typeparam>
-        /// <param name="item">등록할 객체</param>
-        /// <returns>등록이 가능한지</returns>
+        /// <typeparam name="T">The type of the object to register.</typeparam>
+        /// <param name="item">The object to register.</param>
+        /// <returns>Whether registration is possible.</returns>
         public bool Register<T>(T item) where T : TBase
         {
             if (item == null || Contains(typeof(T))) return false;
@@ -117,10 +117,10 @@ namespace AMBehaviorSystem
         }
 
         /// <summary>
-        /// 새로운 객체를 등록합니다.
+        /// Registers a new object.
         /// </summary>
-        /// <param name="item">등록할 객체</param>
-        /// <returns>등록이 가능한지</returns>
+        /// <param name="item">The object to register.</param>
+        /// <returns>Whether registration is possible.</returns>
         public bool Register(object item)
         {
             if (item == null || item is not TBase baseItem) return false;
@@ -130,11 +130,11 @@ namespace AMBehaviorSystem
         }
 
         /// <summary>
-        /// 특정 객체를 등록 해제합니다.
+        /// Unregisters a specific object.
         /// </summary>
-        /// <typeparam name="T">등록 해제할 객체의 타입</typeparam>
-        /// <param name="item">등록 해제된 객체</param>
-        /// <returns>등록 해제가 가능한지</returns>
+        /// <typeparam name="T">The type of the object to unregister.</typeparam>
+        /// <param name="item">The object to unregister.</param>
+        /// <returns>Whether unregistration is possible.</returns>
         public bool Unregister<T>(out T item) where T : TBase
         {
             for (int i = 0; i < SerializedObjects.Count; i++)
@@ -149,11 +149,11 @@ namespace AMBehaviorSystem
         }
 
         /// <summary>
-        /// 특정 객체를 등록 해제합니다.
+        /// Unregisters a specific object.
         /// </summary>
-        /// <param name="type">등록 해제할 객체의 타입</param>
-        /// <param name="item">등록 해제된 객체</param>
-        /// <returns>등록 해제가 가능한지</returns>
+        /// <typeparam name="T">The type of the object to unregister.</typeparam>
+        /// <param name="item">The object to unregister.</param>
+        /// <returns>Whether unregistration is possible.</returns>
         public bool Unregister(Type type, out object item)
         {
             for (int i = 0; i < SerializedObjects.Count; i++)
