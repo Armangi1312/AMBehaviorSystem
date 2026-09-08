@@ -13,3 +13,10 @@
 - Added comments and explanations.
 - Translated comments into English.
 ---
+
+## 1.0.4 Update
+- Fixed an issue that occasionally occurred when adding processors in IL2CPP builds.
+- Troubleshooting assembly definition issues.
+- Improved performance in the Controller Editor by using TypeCache.
+- Added a component reference to the arguments of the Initialize method of Processor.
+---

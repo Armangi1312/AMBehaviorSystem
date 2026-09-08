@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 
 namespace AMBehaviorSystem
 {
@@ -43,6 +44,7 @@ namespace AMBehaviorSystem
         /// </summary>
         /// <param name="settings">The settings store.</param>
         /// <param name="contexts">The context store.</param>
-        public abstract void Initialize(IReadOnlyRegistry<TSetting> settings, IReadOnlyRegistry<TContext> contexts);
+        /// <param name="owner">The component that owns this processor.</param>
+        public abstract void Initialize(IReadOnlyRegistry<TSetting> settings, IReadOnlyRegistry<TContext> contexts, Component owner);
     }
 }

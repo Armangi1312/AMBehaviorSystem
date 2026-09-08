@@ -93,7 +93,7 @@ namespace AMBehaviorSystem
 
                 try
                 {
-                    processor.Initialize(Settings, Contexts);
+                    processor.Initialize(Settings, Contexts, this);
                 }
                 catch (Exception e)
                 {
@@ -233,7 +233,7 @@ namespace AMBehaviorSystem
             if (processor == null) return;
 
             ValidateDependencies();
-            processor.Initialize(Settings, Contexts);
+            processor.Initialize(Settings, Contexts, this);
         }
 
         #endregion

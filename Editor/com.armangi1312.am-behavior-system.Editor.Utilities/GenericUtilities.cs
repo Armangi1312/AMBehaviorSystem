@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+using UnityEditor;
 
 namespace AMBehaviorSystem.Editor.Utilities
 {
     public static class GenericUtilities
     {
         private static readonly Dictionary<Type, Type[]> inheritedTypesCache = new();
-        private static Assembly[] cachedAssemblies;
 
         public static Type[] CollectInheritedTypes(Type baseType)
         {
@@ -17,29 +18,12 @@ namespace AMBehaviorSystem.Editor.Utilities
             if(inheritedTypesCache.TryGetValue(baseType, out Type[] cached))
                 return cached;
 
-            List<Type> result = new();
-            cachedAssemblies ??= AppDomain.CurrentDomain.GetAssemblies();
+            Type[] array = TypeCache.GetTypesDerivedFrom(baseType)
+                                    .Where(type => !type.IsAbstract && !type.IsInterface && !type.ContainsGenericParameters)
+                                    .ToArray();
 
-            foreach(Assembly assembly in cachedAssemblies)
-            {
-                Type[] types;
-                try
-                { types = assembly.GetTypes(); }
-                catch { continue; }
-
-                foreach(Type type in types)
-                {
-                    if(type.IsAbstract || type.IsInterface || type.ContainsGenericParameters)
-                        continue;
-
-                    if(baseType.IsAssignableFrom(type))
-                        result.Add(type);
-                }
-            }
-
-            Type[] arr = result.ToArray();
-            inheritedTypesCache[baseType] = arr;
-            return arr;
+            inheritedTypesCache[baseType] = array;
+            return array;
         }
 
         public static Type[] GetElementTypes(Type type)
