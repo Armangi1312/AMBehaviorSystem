@@ -58,7 +58,10 @@ AM Behavior System은 유니티 패키지 매니저에서 설치할 수 있습�
 `https://github.com/Armangi1312/AMBehaviorSystem.git` 을 복사 붙여넣고 `Add` 버튼을 클릭하면 설치가 시작됩니다.
 설치가 다 되면 이제부터 AM Behavior System을 사용할 수 있습니다.
 
----ㄴ
+## 3. 빠른 시작
+[빠른 시작](https://github.com/Armangi1312/AMBehaviorSystem/blob/main/Documentation~/ko-KR/QuickStart.md)을 참고해주세요.
+
+---
 
 ## 3. 이외로
 

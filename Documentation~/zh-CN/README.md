@@ -57,6 +57,9 @@ AM Behavior System 可通过 Unity Package Manager 进行安装。
 粘贴 `https://github.com/Armangi1312/AMBehaviorSystem.git`，然后点击 `Add` 按钮即可开始安装。
 安装完成后，即可立即开始使用 AM Behavior System。
 
+## 3. 快速入门
+如需了解更多信息，请参阅[快速入门指南](https://github.com/Armangi1312/AMBehaviorSystem/blob/main/Documentation~/zh-CN/QuickStart.md)。
+
 ---
 
 请通过 [Github Issues](https://github.com/Armangi1312/AMBehaviorSystem/issues) 提交 Bug 报告。

@@ -6,7 +6,7 @@
 <p align="center">
     <a href="https://github.com/Armangi1312/AMBehaviorSystem/releases"><img src="https://img.shields.io/github/v/release/Armangi1312/AMBehaviorSystem"/></a>
     <a href="https://github.com/Armangi1312/AMBehaviorSystem/blob/main/LICENSE.md"><img src="https://img.shields.io/github/license/Armangi1312/AMBehaviorSystem"/></a>
-    <img src="https://img.shields.io/badge/Unity-2022.3%2B-black?logo=unity"/>
+    <img src="https://img.shields.io/badge/Unity-6.0 LTS %2B-black?logo=unity"/>
 </p>
 
 <p align="center">
@@ -16,12 +16,11 @@
 
 ---
 
-- [한국어](README.md)
-- [English](README_EN.md)
-- [中文]()
+- [한국어](https://github.com/Armangi1312/AMBehaviorSystem/tree/main/Documentation~/ko-KR/README.md)
+- [English](https://github.com/Armangi1312/AMBehaviorSystem/blob/main/Documentation~/en-US/README.md)
+- [中文](https://github.com/Armangi1312/AMBehaviorSystem/blob/main/Documentation~/zh-CN/README.md)
 
 ---
-
 
 ## 1. Introduction
 
@@ -29,6 +28,7 @@ AM Behavior System is a behavior system framework for the Unity Engine.
 - Provides high reusability and flexibility through **Setting**, **Context**, **Processor**, and **Pipeline**.
 - Supports **visual editing** directly in the Unity Editor.
 - Designed to **minimize GC allocations** at runtime.
+
 
 ### Role of Each Element
 
@@ -57,6 +57,9 @@ Open the Unity Package Manager, click the `+` button in the top-left corner, and
 
 Paste `https://github.com/Armangi1312/AMBehaviorSystem.git` and click the `Add` button to begin installation.
 Once installed, you can start using AM Behavior System right away.
+
+## 3. Quick Start
+For more information, please refer to the [Quick Start Guide](https://github.com/Armangi1312/AMBehaviorSystem/blob/main/Documentation~/en-US/QuickStart.md).
 
 ---
 

@@ -58,6 +58,9 @@ Open the Unity Package Manager, click the `+` button in the top-left corner, and
 Paste `https://github.com/Armangi1312/AMBehaviorSystem.git` and click the `Add` button to begin installation.
 Once installed, you can start using AM Behavior System right away.
 
+## 3. Quick Start
+For more information, please refer to the [Quick Start Guide](https://github.com/Armangi1312/AMBehaviorSystem/blob/main/Documentation~/en-US/QuickStart.md).
+
 ---
 
 Please report any bugs via [Github Issues](https://github.com/Armangi1312/AMBehaviorSystem/issues).
